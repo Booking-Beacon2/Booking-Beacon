@@ -22,6 +22,10 @@ public enum CommonErrorCode implements ErrorCode{
     BB_EMAIL_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다"),
     BB_PARTNER_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "동일 사업자번호로 등록된 파트너가 이미 존재합니다."),
     BB_PARTNER_NOT_FOUND(HttpStatus.NOT_FOUND, "파트너 정보가 존재하지 않습니다."),
+    BB_FILE_NOT_IMAGE(HttpStatus.FORBIDDEN, "파일이 이미지 형태가 아닙니다."),
+    BB_FILE_UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "파일 업로드에 실패했습니다."),
+    BB_FILE_NOT_FOUND(HttpStatus.BAD_REQUEST, "파일이 존재하지 않습니다."),
+    BB_FILE_DOWNLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "파일 다운에 실패했습니다.")
     ;
 
     // 여기서 상속 받은 getName 이 enum 의 name 즉 USER_NOT_FOUND 를 가져온다.
