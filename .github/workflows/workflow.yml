@@ -41,5 +41,5 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         run: |
           chmod +x ./push-image.sh
-          ./push-image.sh
+          ./push-image.sh dev
 
