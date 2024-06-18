@@ -1,0 +1,63 @@
+# application.yml
+server:
+  port: 8080
+
+spring:
+  application:
+    name: booking-service
+    profiles:
+      default: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(DBdQRV1AXlzSkHje0jDDzwtVyP9t64tkkWf8N6Q0UO0s/iMtEXAgLLP7VbbczlpkEjfPCr1AckLZ7zsPuPHbp8tRplX4D8kqmWd4kApAkd8=)
+    username: root
+    password: ENC(auQgF7+6yjdXi19x2QgpyS3XWmN+e2CH)
+  kafka:
+    admin:
+      auto-create: true
+    bootstrap-servers: localhost:9092
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+jwt:
+  secret: ENC(J75n9EXpmHVC4t/vYOHbORr73x394E69sYd7axyU/oMcDq6vP2s9FZ+utIKSEfusPbfOfz7sKcZk5jFgRyQ1d40mIGz64g5AGBDdQtnGeiM=)
+  access-token-validity-in-seconds: 3000
+
+cloud:
+  aws:
+    s3:
+      bucket: booking-beacon-dev
+      accessKey: ENC(XPFfJHOGYVbJyAWgoRdlEFtc2QzN9L4GW5Y8LIcWlVM=)
+      secretKey: ENC(JpXQFkq+IcgCJ7nPLGsNU6F0Ko5H+qtUysYTWEllgSYJ+TVJfUN+9njHtwYjDRbhubIU1T3GTmY=)
+      stack:
+        auto: false
+      region: ap-northeast-2
+
+springdoc:
+  swagger-ui:
+    groups-order: desc
+    tags-sorter: alpha
+    operations-sorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+    default-model-expand-depth: 3
+    default-models-expand-depth: 3
+    path: /swagger
+  api-docs:
+    enabled: true
+    path: /api-docs
+  cache:
+    disabled: true
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  writer-with-default-pretty-printer: true
+  model-and-view-allowed: true
