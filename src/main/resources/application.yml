@@ -20,7 +20,6 @@ spring:
     redis:
       host: localhost
       port: 6379
-
   jpa:
     show-sql: true
     hibernate:
@@ -29,7 +28,7 @@ spring:
       hibernate:
         format_sql: true
 jwt:
-  secret: ENC(rzO56vRC1eAWNhoyoHbtEJlULqg/0Z5zf8lFuUCW1zJiIq4GJHb8x5k0PyUGhsZB4Oh7NihAjit8f49TZhadKKyfpXEnzoC4nYGCzjApeuE=)
+  secret: ENC(J75n9EXpmHVC4t/vYOHbORr73x394E69sYd7axyU/oMcDq6vP2s9FZ+utIKSEfusPbfOfz7sKcZk5jFgRyQ1d40mIGz64g5AGBDdQtnGeiM=)
   access-token-validity-in-seconds: 600
 
 cloud:
