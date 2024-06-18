@@ -67,7 +67,7 @@ public class AuthController {
         return this.authService.unhandledError();
     }
 
-    @PostMapping("user")
+    @PostMapping("join")
     @Operation(summary = "회원가입")
     public ResponseEntity<CreateUserRes> createUser(@RequestBody CreateUserReq createUserReq) {
         return this.authService.createUser(createUserReq);
