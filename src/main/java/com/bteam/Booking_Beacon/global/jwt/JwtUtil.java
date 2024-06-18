@@ -12,11 +12,11 @@ import java.util.Date;
 
 @Slf4j
 @Component
-public class JwtTokenUtil {
+public class JwtUtil {
     private final Key key;
     private final long tokenValidityInSeconds;
 
-    public JwtTokenUtil(@Value("${jwt.secret}")String secretKey, @Value("${jwt.access-token-validity-in-seconds}") long tokenValidityInSeconds) {
+    public JwtUtil(@Value("${jwt.secret}")String secretKey, @Value("${jwt.access-token-validity-in-seconds}") long tokenValidityInSeconds) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.tokenValidityInSeconds = tokenValidityInSeconds;
@@ -41,11 +41,12 @@ public class JwtTokenUtil {
      */
     public Claims parseToken(String token) {
         try {
-            return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
     }
+
 
     /**
      * 토큰에서 유저 정보 추출
@@ -55,5 +56,24 @@ public class JwtTokenUtil {
         long userId = claims.get("userId", Long.class);
         String username = claims.get("username", String.class);
         return JwtUserInfo.builder().userId(userId).username(username).build();
+    }
+
+    /**
+     * @description 토큰이 정상적인 형태인지 여부
+     */
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("Invalid JWT Token", e);
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT Token", e);
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT Token", e);
+        } catch (IllegalArgumentException e) {
+            log.info("JWT claims string is empty.", e);
+        }
+        return false;
     }
 }

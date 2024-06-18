@@ -30,20 +30,21 @@ public class AuthController {
     private final AuthService authService;
 
     @GetMapping("info")
-     @Operation(summary = "info")
+    @Operation(summary = "info")
     public void info() {
         log.info("auth-service has initialized!");
     }
+
     /***** USER *****/
     @GetMapping("users")
     @Operation(summary = "유저 리스트 조회")
-    public ResponseEntity<List<UserEntity>> getUsers() {
+    public ResponseEntity<List<UserEntity>> getUsers(@RequestAttribute("userId") long userId) {
         return authService.getUsers();
     }
 
     @GetMapping("user")
     @Operation(summary = "본인 정보 조회")
-    public ResponseEntity<Optional<UserEntity>> getUser(@RequestHeader("userId") long userId) {
+    public ResponseEntity<Optional<UserEntity>> getUser(@RequestAttribute("userId") long userId) {
         return authService.getUser(userId);
     }
 
@@ -81,17 +82,17 @@ public class AuthController {
 
     /***** PARTNER *****/
     @PostMapping("partner")
-    public ResponseEntity<CreatePartnerRes> createPartner(@RequestHeader("userId") long userId, @RequestBody CreatePartnerReq createPartnerReq) {
+    public ResponseEntity<CreatePartnerRes> createPartner(@RequestAttribute("userId") long userId, @RequestBody CreatePartnerReq createPartnerReq) {
         return this.authService.createPartner(userId, createPartnerReq);
     }
 
     @PutMapping("partner")
-    public void updatePartner(@RequestHeader("userId") long userId, @RequestBody UpdatePartnerReq updatePartnerReq) {
+    public void updatePartner(@RequestAttribute("userId") long userId, @RequestBody UpdatePartnerReq updatePartnerReq) {
         this.authService.updatePartner(userId, updatePartnerReq);
     }
 
     @DeleteMapping("partner")
-    public void deletePartner(@RequestHeader("userId") long userId) {
+    public void deletePartner(@RequestAttribute("userId") long userId) {
         this.authService.deletePartner(userId);
     }
 }
