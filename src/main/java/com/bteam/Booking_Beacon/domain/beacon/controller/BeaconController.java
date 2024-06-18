@@ -27,7 +27,7 @@ public class BeaconController {
     }
 
     @PostMapping("pick")
-    public void pick(@RequestBody PickReq pickReq, @RequestHeader("userId") Long userId) throws JsonProcessingException {
+    public void pick(@RequestBody PickReq pickReq, @RequestAttribute("userId") Long userId) throws JsonProcessingException {
         this.kafkaProducer.sendMessage(pickReq, userId);
     }
 
@@ -35,14 +35,14 @@ public class BeaconController {
      * 대기열 관리 API - 조회, 등록
      */
     @PostMapping("wait")
-    public void postWait(@RequestHeader("userId") Long userId) throws JsonProcessingException {
+    public void postWait(@RequestAttribute("userId") Long userId) throws JsonProcessingException {
         double dValue = Math.random();
         int randNum = (int)(dValue * 100);
         this.redisService.setRedis(userId.toString(), Integer.toString(randNum));
     }
 
     @GetMapping("wait")
-    public void getWait(@RequestHeader("userId") Long userId) throws JsonProcessingException {
+    public void getWait(@RequestAttribute("userId") Long userId) throws JsonProcessingException {
         this.redisService.getRedis(userId.toString());
     }
 
