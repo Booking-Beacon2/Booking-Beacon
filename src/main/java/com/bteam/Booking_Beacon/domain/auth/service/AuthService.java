@@ -12,7 +12,7 @@ import com.bteam.Booking_Beacon.global.config.AuthConfig;
 import com.bteam.Booking_Beacon.global.exception.CommonErrorCode;
 import com.bteam.Booking_Beacon.global.exception.RestApiException;
 import com.bteam.Booking_Beacon.global.exception.UnHandledUserException;
-import com.bteam.Booking_Beacon.global.jwt.JwtTokenUtil;
+import com.bteam.Booking_Beacon.global.jwt.JwtUtil;
 import com.bteam.Booking_Beacon.global.jwt.JwtUserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import java.util.Optional;
 public class AuthService {
     private final UserRepository userRepository;
     private final PartnerRepository partnerRepository;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtUtil jwtTokenUtil;
     private final AuthConfig authConfig;
 
     /**
