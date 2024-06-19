@@ -5,8 +5,6 @@ server:
 spring:
   application:
     name: booking-service
-    profiles:
-      default: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ENC(DBdQRV1AXlzSkHje0jDDzwtVyP9t64tkkWf8N6Q0UO0s/iMtEXAgLLP7VbbczlpkEjfPCr1AckLZ7zsPuPHbp8tRplX4D8kqmWd4kApAkd8=)
@@ -27,6 +25,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  profiles:
+    active: dev
 jwt:
   secret: ENC(J75n9EXpmHVC4t/vYOHbORr73x394E69sYd7axyU/oMcDq6vP2s9FZ+utIKSEfusPbfOfz7sKcZk5jFgRyQ1d40mIGz64g5AGBDdQtnGeiM=)
   access-token-validity-in-seconds: 3000
