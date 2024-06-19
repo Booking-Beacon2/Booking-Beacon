@@ -1,5 +1,6 @@
 FROM amazoncorretto:21-alpine AS builder
 ARG PROFILE
+ARG JASTPY_PASSWORD
 
 COPY gradlew .
 COPY gradle gradle
@@ -12,6 +13,6 @@ RUN ./gradlew bootJar -x test -Pprofile=${PROFILE}	#gradlew를 통해 실행 가
 FROM amazoncorretto:21-alpine
 COPY --from=builder build/libs/*.jar booking-beacon.jar
 ENV PROFILE dev
-ENTRYPOINT ["java", "-Dspring.profiles.active=${PROFILE}", "-DJASYPT_PASSWORD=bteam-booking-beacon" ,"-jar", "/booking-beacon.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=${PROFILE}", "-DJASYPT_PASSWORD=${JASTPY_PASSWORD}" ,"-jar", "/booking-beacon.jar"]
 VOLUME /tmp
 

@@ -16,7 +16,6 @@ services:
       - booking-beacon-network
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      JASYPT_PASSWORD: bteam-booking-beacon
 
 
 
