@@ -9,3 +9,9 @@ COPY src src
 RUN chmod +x ./gradlew	#gradlew 실행 권한 부여
 RUN ./gradlew bootJar -x test -Pprofile=${PROFILE}	#gradlew를 통해 실행 가능한 jar파일 생성
 
+FROM amazoncorretto:21-alpine
+COPY --from=builder build/libs/*.jar booking-beacon.jar
+ENV PROFILE dev
+ENTRYPOINT ["java", "-Dspring.profiles.active=${PROFILE}", "-DJASYPT_PASSWORD=bteam-booking-beacon" ,"-jar", "/booking-beacon.jar"]
+VOLUME /tmp
+

@@ -6,7 +6,7 @@ networks:
 services:
   booking-beacon:
     image:
-      381492090552:dkr:ecr:ap-northeast-2:amazonaws:com/booking-beacon:booking-beacon
+      381492090552.dkr.ecr.ap-northeast-2.amazonaws.com/booking-beacon:booking-beacon
     #    restart: always
     ports:
       - 8080:8080
