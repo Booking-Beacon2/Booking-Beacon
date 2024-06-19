@@ -7,7 +7,7 @@ spring:
     name: booking-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(DBdQRV1AXlzSkHje0jDDzwtVyP9t64tkkWf8N6Q0UO0s/iMtEXAgLLP7VbbczlpkEjfPCr1AckLZ7zsPuPHbp8tRplX4D8kqmWd4kApAkd8=)
+    url: ENC(Dr8i3ubMyCt8WNc/SpPreDQtCbrQYZkx+3MuWh6JktBvJXQBXp3h16P4CBfJ4Ja97mzCs6BhvBgTWvJRO18kGIZFbe+7UcG5v00ZQkyuA77iPPaL1P9rtg==)
     username: root
     password: ENC(auQgF7+6yjdXi19x2QgpyS3XWmN+e2CH)
   kafka:
