@@ -25,8 +25,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  profiles:
-    active: dev
+
 jwt:
   secret: ENC(J75n9EXpmHVC4t/vYOHbORr73x394E69sYd7axyU/oMcDq6vP2s9FZ+utIKSEfusPbfOfz7sKcZk5jFgRyQ1d40mIGz64g5AGBDdQtnGeiM=)
   access-token-validity-in-seconds: 3000
