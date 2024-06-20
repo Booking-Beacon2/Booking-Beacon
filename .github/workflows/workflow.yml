@@ -79,7 +79,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Login to Amazon ECR 2
-        id: login-ecr
+        id: login-ecr2
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: deploy server
