@@ -51,7 +51,7 @@ jobs:
           chmod 400 booking-beacon-pem.pem
 
       - name: connect to bastion instance
-        uses: appleboy/ssh-action@v0.1.6
+        uses: appleboy/ssh-action@v0.1.9
         with:
           host: 54.180.244.199 # 인스턴스 IP
           username: ubuntu
@@ -61,16 +61,7 @@ jobs:
             pwd
             ./connect-to-instance.sh
             hostname -I
-#      - name: connect to server instance through bastion
-#        run: |
-#          chmod +x deploy.sh
-#          ./deploy.sh
-#
-#      - name: connect to server instance
-#        run: |
-#          hostname -I
-#          pwd
-#          ./connect-to-instance.sh
+
 
       - name: connect to server instance
         uses: appleboy/ssh-action@v0.1.9
@@ -79,6 +70,5 @@ jobs:
           username: ubuntu
           key: ${{secrets.BOOKING_BEACON_PEM}} # ec2 instance pem key
           script: |            
-            ./clear-container-and-image.sh
-            docker-compose up -d
+            ./deploy.sh
 
