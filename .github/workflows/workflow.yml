@@ -59,7 +59,7 @@ jobs:
           script: |
             hostname -I
             pwd
-            ssh -i "booking-beacon-key.pem" -o StrictHostKeyChecking=no ubuntu@${{secrets.SERVER_PRIVATE_IP}} 'bash home/ubuntu/deploy.sh'
+            ssh -i "booking-beacon-key.pem" -o StrictHostKeyChecking=no ubuntu@172.31.11.204 'bash home/ubuntu/deploy.sh'
 
 #      - name: connect to server instance
 #        uses: appleboy/ssh-action@v0.1.9
