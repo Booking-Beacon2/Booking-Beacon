@@ -58,7 +58,7 @@ jobs:
           key: ${{secrets.BOOKING_BEACON_PEM}} # ec2 instance pem key
           script: |
             hostname -I
-            ssh -i "booking-beacon-key.pem" -o StrictHostKeyChecking=no ubuntu@${{secrets.SERVER_PRIVATE_IP}} 'ls'
+            ssh -i "booking-beacon-key.pem" -o StrictHostKeyChecking=no ubuntu@${{secrets.SERVER_PRIVATE_IP}} 'bash ./deploy.sh'
 
 #      - name: connect to server instance
 #        uses: appleboy/ssh-action@v0.1.9
