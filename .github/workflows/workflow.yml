@@ -51,7 +51,7 @@ jobs:
           chmod 400 booking-beacon-pem.pem
 
       - name: connect to bastion instance
-        uses: appleboy/ssh-action@v0.1.9
+        uses: appleboy/ssh-action@master
         with:
           host: 54.180.244.199 # 인스턴스 IP
           username: ubuntu
@@ -59,8 +59,7 @@ jobs:
           script: |
             hostname -I
             pwd
-            ./connect-to-instance.sh 
-            hostname -I
+            ./connect-to-instance.sh 'home/ubuntu/deploy.sh'
 
 #      - name: connect to server instance
 #        uses: appleboy/ssh-action@v0.1.9
