@@ -60,7 +60,7 @@ jobs:
             hostname -I
             pwd
             ./connect-to-instance.sh 
-            ./deploy.sh
+            hostname -I
 
 #      - name: connect to server instance
 #        uses: appleboy/ssh-action@v0.1.9
