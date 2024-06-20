@@ -55,10 +55,11 @@ jobs:
           chmod +x deploy.sh
           ./deploy.sh
 
-#      - name: connect to server instance
-#        run: |
-#          hostname -I
-#          ./connect-to-instance.sh
+      - name: connect to server instance
+        run: |
+          hostname -I
+          pwd
+          ./connect-to-instance.sh
 
       - name: run application
         run: |
