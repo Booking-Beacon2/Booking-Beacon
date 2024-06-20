@@ -60,13 +60,15 @@ jobs:
             hostname -I
             pwd
             ./connect-to-instance.sh 
+            ./deploy.sh
 
-      - name: connect to server instance
-        uses: appleboy/ssh-action@v0.1.9
-        with:
-          host: ${{secrets.SERVER_PRIVATE_IP}} # 인스턴스 IP
-          username: ubuntu
-          key: ${{secrets.BOOKING_BEACON_PEM}} # ec2 instance pem key
-          script: |
-            hostname -I
+#      - name: connect to server instance
+#        uses: appleboy/ssh-action@v0.1.9
+#        with:
+#          host: ${{secrets.SERVER_PRIVATE_IP}} # 인스턴스 IP
+#          username: ubuntu
+#          key: ${{secrets.BOOKING_BEACON_PEM}} # ec2 instance pem key
+#          port: 22
+#          script: |
+#            hostname -I
       
