@@ -63,6 +63,7 @@ jobs:
 
       - name: deploy
         run: |
+          hostname -I
           chmod +x deploy.sh
           bash ./deploy.sh
 
