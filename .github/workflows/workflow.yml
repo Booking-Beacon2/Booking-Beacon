@@ -52,12 +52,13 @@ jobs:
 
       - name: connect to server instance through bastion
         run: |
-          ssh -o "StrictHostKeyChecking no" -i booking-beacon-pem.pem ubuntu@54.180.244.199 
+          chmod +x deploy.sh
+          ./deploy.sh
 
-      - name: connect to server instance
-        run: |
-          hostname -I
-          ./connect-to-instance.sh
+#      - name: connect to server instance
+#        run: |
+#          hostname -I
+#          ./connect-to-instance.sh
 
       - name: run application
         run: |

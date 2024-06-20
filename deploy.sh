@@ -1,2 +1,1 @@
-PEM_FILE=${1}
-ssh -i booking-beacon-key.pem ubuntu@54.180.244.199
+ssh -o "StrictHostKeyChecking no" -i booking-beacon-pem.pem ubuntu@54.180.244.199 ./connect-to-instance.sh
