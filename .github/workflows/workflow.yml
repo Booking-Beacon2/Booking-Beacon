@@ -73,7 +73,7 @@ jobs:
 #          ./connect-to-instance.sh
 
       - name: connect to server instance
-        uses: appleboy/ssh-action@v0.1.6
+        uses: appleboy/ssh-action@v0.1.9
         with:
           host: ${{secrets.SERVER_PRIVATE_IP}} # 인스턴스 IP
           username: ubuntu
