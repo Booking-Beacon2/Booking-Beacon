@@ -38,10 +38,10 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push image to Amazon ECR DEV
-        run: |
-          chmod +x ./push-image.sh
-          ./push-image.sh dev ${{secrets.JASYPT_PASSWORD}}
+#      - name: Build, tag, and push image to Amazon ECR DEV
+#        run: |
+#          chmod +x ./push-image.sh
+#          ./push-image.sh dev ${{secrets.JASYPT_PASSWORD}}
 
       - name: generate pem file
         env:
@@ -59,7 +59,7 @@ jobs:
           script: |
             hostname -I
             pwd
-            ssh -i "booking-beacon-key.pem" -o StrictHostKeyChecking=no ubuntu@172.31.11.204 'bash home/ubuntu/deploy.sh'
+            ssh -i "booking-beacon-key.pem" -o StrictHostKeyChecking=no ubuntu@${{secrets.SERVER_PRIVATE_IP}} 'hostname -I'
 
 #      - name: connect to server instance
 #        uses: appleboy/ssh-action@v0.1.9
