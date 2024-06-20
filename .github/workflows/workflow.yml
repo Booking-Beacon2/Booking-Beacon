@@ -52,7 +52,7 @@ jobs:
 
       - name: connect to bastion instance
         run: |
-          ssh -i booking-beacon-pem.pem ubuntu@54.180.244.199
+          ssh -o "StrictHostKeyChecking no" -i booking-beacon-pem.pem ubuntu@54.180.244.199
 
       - name: run application
         run: |
