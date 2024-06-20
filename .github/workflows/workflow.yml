@@ -54,6 +54,11 @@ jobs:
         run: |
           ssh -o "StrictHostKeyChecking no" -i booking-beacon-pem.pem ubuntu@54.180.244.199
 
+      - name: connect to server instance
+        run: |
+          chmod +x connect-to-instance.sh
+          ./connect-to-instance.sh
+
       - name: run application
         run: |
           chmod +x clear-container-and-image.sh
