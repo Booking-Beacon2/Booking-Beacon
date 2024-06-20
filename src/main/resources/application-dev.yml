@@ -10,10 +10,10 @@ spring:
     url: ENC(Dr8i3ubMyCt8WNc/SpPreDQtCbrQYZkx+3MuWh6JktBvJXQBXp3h16P4CBfJ4Ja97mzCs6BhvBgTWvJRO18kGIZFbe+7UcG5v00ZQkyuA77iPPaL1P9rtg==)
     username: root
     password: ENC(auQgF7+6yjdXi19x2QgpyS3XWmN+e2CH)
-  kafka:
-    admin:
-      auto-create: true
-    bootstrap-servers: localhost:9092
+#  kafka:
+#    admin:
+#      auto-create: true
+#    bootstrap-servers: localhost:9092
   data:
     redis:
       host: localhost
