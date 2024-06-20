@@ -60,6 +60,7 @@ jobs:
             hostname -I
             pwd
             ./connect-to-instance.sh
+            hostname -I
 #      - name: connect to server instance through bastion
 #        run: |
 #          chmod +x deploy.sh
@@ -71,10 +72,17 @@ jobs:
 #          pwd
 #          ./connect-to-instance.sh
 
-      - name: run application
-        run: |
-          chmod +x clear-container-and-image.sh
-          ./clear-container-and-image.sh
-          chmod +x docker-compose.yml
-          docker-compose up -d
-          
+      - name: connect to server instance
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{SERVER_PRIVATE_IP}} # 인스턴스 IP
+          username: ubuntu
+          key: ${{secrets.BOOKING_BEACON_PEM}} # ec2 instance pem key
+          script: |
+            hostname -I
+            pwd
+            chmod +x clear-container-and-image.sh
+            ./clear-container-and-image.sh
+            chmod +x docker-compose.yml
+            docker-compose up -d
+
