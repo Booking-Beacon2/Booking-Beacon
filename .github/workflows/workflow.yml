@@ -56,8 +56,8 @@ jobs:
           host: ${{secrets.BASTION_PUBLIC_IP}} # 인스턴스 IP
           username: ubuntu
           key: ${{secrets.BOOKING_BEACON_PEM}} # ec2 instance pem key
-          script: |
+          script: | # connect to server instance and run deploy script
             hostname -I
-            ssh -i ${{secrets.BOOKING_BEACON_PEM}} -o StrictHostKeyChecking=no ubuntu@${{secrets.SERVER_PRIVATE_IP}} 'bash ./deploy.sh'
+            ssh -i "booking-beacon-key.pem" -o StrictHostKeyChecking=no ubuntu@${{secrets.SERVER_PRIVATE_IP}} 'bash ./deploy.sh' 
 
       
