@@ -61,18 +61,12 @@ jobs:
             pwd
             ./connect-to-instance.sh 
 
-      - name: deploy
-        run: |
-          hostname -I
-          chmod +x deploy.sh
-          bash ./deploy.sh
-
-#      - name: connect to server instance
-#        uses: appleboy/ssh-action@v0.1.9
-#        with:
-#          host: ${{secrets.SERVER_PRIVATE_IP}} # 인스턴스 IP
-#          username: ubuntu
-#          key: ${{secrets.BOOKING_BEACON_PEM}} # ec2 instance pem key
-#          script: |
-#            aws ecr get-login-password | docker login --username AWS --password-stdin 381492090552.dkr.ecr.ap-northeast-2.amazonaws.com/booking-beacon
-#            ./deploy.sh
+      - name: connect to server instance
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{secrets.SERVER_PRIVATE_IP}} # 인스턴스 IP
+          username: ubuntu
+          key: ${{secrets.BOOKING_BEACON_PEM}} # ec2 instance pem key
+          script: |
+            hostname -I
+      
