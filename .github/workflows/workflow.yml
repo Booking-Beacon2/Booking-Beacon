@@ -50,14 +50,9 @@ jobs:
           echo -e "$PEM" > booking-beacon-pem.pem
           chmod 400 booking-beacon-pem.pem
 
-      - name: connect to bastion instance
+      - name: connect to server instance through bastion
         run: |
-          ssh -o "StrictHostKeyChecking no" -i booking-beacon-pem.pem ubuntu@54.180.244.199
-
-      - name: connect to server instance
-        run: |
-          chmod +x connect-to-instance.sh
-          ./connect-to-instance.sh
+          ssh -o "StrictHostKeyChecking no" -i booking-beacon-pem.pem ubuntu@54.180.244.199 home/ubuntu/connect-to-instance.sh
 
       - name: run application
         run: |
