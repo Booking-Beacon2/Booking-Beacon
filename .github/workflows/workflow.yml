@@ -38,10 +38,10 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-#      - name: Build, tag, and push image to Amazon ECR DEV
-#        run: |
-#          chmod +x ./push-image.sh
-#          ./push-image.sh dev ${{secrets.JASYPT_PASSWORD}}
+      - name: Build, tag, and push image to Amazon ECR DEV
+        run: |
+          chmod +x ./push-image.sh
+          ./push-image.sh dev ${{secrets.JASYPT_PASSWORD}}
 
       - name: generate pem file
         env:
@@ -50,23 +50,14 @@ jobs:
           echo -e "$PEM" > booking-beacon-pem.pem
           chmod 400 booking-beacon-pem.pem
 
-      - name: connect to bastion instance
+      - name: connect to EC2 instance via bastion and deploy
         uses: appleboy/ssh-action@master
         with:
-          host: 54.180.244.199 # 인스턴스 IP
+          host: ${{secrets.BASTION_PUBLIC_IP}} # 인스턴스 IP
           username: ubuntu
           key: ${{secrets.BOOKING_BEACON_PEM}} # ec2 instance pem key
           script: |
             hostname -I
-            ssh -i "booking-beacon-key.pem" -o StrictHostKeyChecking=no ubuntu@${{secrets.SERVER_PRIVATE_IP}} 'bash ./deploy.sh'
+            ssh -i ${{secrets.BOOKING_BEACON_PEM}} -o StrictHostKeyChecking=no ubuntu@${{secrets.SERVER_PRIVATE_IP}} 'bash ./deploy.sh'
 
-#      - name: connect to server instance
-#        uses: appleboy/ssh-action@v0.1.9
-#        with:
-#          host: ${{secrets.SERVER_PRIVATE_IP}} # 인스턴스 IP
-#          username: ubuntu
-#          key: ${{secrets.BOOKING_BEACON_PEM}} # ec2 instance pem key
-#          port: 22
-#          script: |
-#            hostname -I
       

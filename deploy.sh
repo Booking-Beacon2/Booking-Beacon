@@ -1,1 +1,0 @@
-ssh -o "StrictHostKeyChecking no" -i booking-beacon-pem.pem ubuntu@54.180.244.199

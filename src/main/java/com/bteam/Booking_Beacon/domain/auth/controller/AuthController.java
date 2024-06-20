@@ -32,7 +32,7 @@ public class AuthController {
     @GetMapping("info")
     @Operation(summary = "info")
     public void info() {
-        log.info("auth-service has initialized!");
+        log.info("auth-service has initialized! 222222");
     }
 
     /***** USER *****/
