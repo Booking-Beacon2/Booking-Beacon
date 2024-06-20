@@ -60,8 +60,10 @@ jobs:
             hostname -I
             pwd
             ./connect-to-instance.sh 
+            
       - name: deploy
         run: |
+          chmod +x deploy.sh
           ./deploy.sh
 
 #      - name: connect to server instance
