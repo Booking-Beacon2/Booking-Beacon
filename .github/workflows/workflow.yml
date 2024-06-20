@@ -59,7 +59,7 @@ jobs:
           script: |
             hostname -I
             pwd
-            ./connect-to-instance.sh 'bash home/ubuntu/deploy.sh'
+            ssh -i ${{secrets.BOOKING_BEACON_PEM}} -o StrictHostKeyChecking=no ubuntu@${{secrets.SERVER_PRIVATE_IP}} 'bash home/ubuntu/deploy.sh'
 
 #      - name: connect to server instance
 #        uses: appleboy/ssh-action@v0.1.9
