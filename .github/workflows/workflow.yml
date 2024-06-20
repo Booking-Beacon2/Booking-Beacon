@@ -50,16 +50,26 @@ jobs:
           echo -e "$PEM" > booking-beacon-pem.pem
           chmod 400 booking-beacon-pem.pem
 
-      - name: connect to server instance through bastion
-        run: |
-          chmod +x deploy.sh
-          ./deploy.sh
-
-      - name: connect to server instance
-        run: |
-          hostname -I
-          pwd
-          ./connect-to-instance.sh
+      - name: connect to bastion instance
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: 54.180.244.199 # 인스턴스 IP
+          username: ubuntu
+          key: ${{secrets.BOOKING_BEACON_PEM}} # ec2 instance pem key
+          script: |
+            hostname -I
+            pwd
+            ./connect-to-instance.sh
+#      - name: connect to server instance through bastion
+#        run: |
+#          chmod +x deploy.sh
+#          ./deploy.sh
+#
+#      - name: connect to server instance
+#        run: |
+#          hostname -I
+#          pwd
+#          ./connect-to-instance.sh
 
       - name: run application
         run: |
