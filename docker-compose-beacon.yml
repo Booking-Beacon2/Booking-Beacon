@@ -1,4 +1,4 @@
-## kafka docker
+## kafka, redis docker - 로컬에서 열면 메모리 이슈로 인해 aws 사용할 예정
 
 version: '3.8'
 

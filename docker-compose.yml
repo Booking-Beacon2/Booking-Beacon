@@ -5,17 +5,12 @@ networks:
 
 services:
   booking-beacon:
-    image:
-      381492090552.dkr.ecr.ap-northeast-2.amazonaws.com/booking-beacon:booking-beacon
-    #    restart: always
+    image: 381492090552.dkr.ecr.ap-northeast-2.amazonaws.com/booking-beacon:booking-beacon
     ports:
       - 8080:8080
-    container_name:
-      booking-beacon-container
+    container_name: booking-beacon-container
     networks:
       - booking-beacon-network
     environment:
       SPRING_PROFILES_ACTIVE: dev
-
-
-
+      JASYPT_PASSWORD: bteam-booking-beacon
