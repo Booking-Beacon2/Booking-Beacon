@@ -54,6 +54,8 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
         }
 
         request.setAttribute("userId", userId);
-        filterChain.doFilter(request, response); // 다음 필터로 넘기기
+        // 여기까지 request filter
+        filterChain.doFilter(request, response); // request, response 기준점
+        // 여기부터 response filter
     }
 }

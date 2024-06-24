@@ -26,6 +26,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // 1. 개발자가 핸들링 하는 에러 (로직 상에서 발생하는 에러)
     @ExceptionHandler(RestApiException.class)
     protected final ResponseEntity<Object> handleCustomException(RestApiException ex) {
+        log.info("handleCustomException");
         ErrorCode errorCode = ex.getErrorCode();
         return handleExceptionInternal(errorCode);
     }
@@ -33,6 +34,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // 2. try catch 에서 잡히는 unhandled error
     @ExceptionHandler(UnHandledUserException.class)
     protected final ResponseEntity<Object> handleUnhandledUserException(UnHandledUserException ex) {
+        log.info("handleUnhandledUserException");
         ErrorCode errorCode = CommonErrorCode.UNHANDLED_EXCEPTION;
         String stackTrace = String.valueOf(Arrays.stream(ex.getStackTrace()).findFirst());
         return handleExceptionInternal(errorCode, ex.getMessage(), stackTrace);
@@ -46,6 +48,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // 일반 에러 + 일치하는 에러가 없을 경우 여기로 온다
    @ExceptionHandler(Exception.class)
     protected final ResponseEntity<Object> handleAllExceptions(Exception ex) {
+       log.info("handleAllExceptions");
        ErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
        String stackTrace = String.valueOf(Arrays.stream(ex.getStackTrace()).findFirst());
        return handleExceptionInternal(errorCode, ex.getMessage(), stackTrace);

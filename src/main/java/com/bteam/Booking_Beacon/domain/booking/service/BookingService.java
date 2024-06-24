@@ -5,6 +5,7 @@ import com.bteam.Booking_Beacon.domain.booking.dto.RegisterMusicalReq;
 import com.bteam.Booking_Beacon.domain.booking.dto.RegisterMusicalRes;
 import com.bteam.Booking_Beacon.domain.booking.entity.MusicalEntity;
 import com.bteam.Booking_Beacon.domain.booking.repository.MusicalRepository;
+import com.bteam.Booking_Beacon.global.format.CommonApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

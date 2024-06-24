@@ -12,10 +12,13 @@ import com.bteam.Booking_Beacon.global.config.AuthConfig;
 import com.bteam.Booking_Beacon.global.exception.CommonErrorCode;
 import com.bteam.Booking_Beacon.global.exception.RestApiException;
 import com.bteam.Booking_Beacon.global.exception.UnHandledUserException;
+import com.bteam.Booking_Beacon.global.format.CommonApiResponse;
 import com.bteam.Booking_Beacon.global.jwt.JwtUtil;
 import com.bteam.Booking_Beacon.global.jwt.JwtUserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -142,7 +145,8 @@ public class AuthService {
                 .build();
 
         Long partnerId = this.partnerRepository.save(partnerEntity).getPartnerId();
-        return ResponseEntity.ok().body(CreatePartnerRes.builder().partnerId(partnerId).build());
+        CreatePartnerRes res = CreatePartnerRes.builder().partnerId(partnerId).build();
+        return ResponseEntity.ok().body(res);
     }
 
     /** @description 파트너 수정 */

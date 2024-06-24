@@ -15,6 +15,7 @@ import com.bteam.Booking_Beacon.domain.booking.repository.FileRepository;
 import com.bteam.Booking_Beacon.global.exception.CommonErrorCode;
 import com.bteam.Booking_Beacon.global.exception.RestApiException;
 import com.bteam.Booking_Beacon.global.exception.UnHandledUserException;
+import com.bteam.Booking_Beacon.global.format.CommonApiResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -44,8 +46,8 @@ public class FileService {
     private final FileRepository fileRepository;
 
     public void uploadFile(List<MultipartFile> files, FileTypeEnum fileTypeEnum) {
-
         files.forEach(file -> {
+
             if (!Objects.requireNonNull(file.getContentType()).startsWith("image")) {
                 log.error("File is not an image");
                 throw new RestApiException(CommonErrorCode.BB_FILE_NOT_IMAGE);
@@ -65,21 +67,22 @@ public class FileService {
             objectMetadata.setContentType(file.getContentType());
             objectMetadata.setContentLength(file.getSize());
 
+            PutObjectResult result = null;
             try {
-                PutObjectResult result = amazonS3Client.putObject(bucket, s3FileName.toString(), file.getInputStream(), objectMetadata);
-                log.info("result : {}", result.getETag());
-                this.saveFile(file, s3FileName, fileTypeEnum);
-            } catch (IOException e) {
-                log.error(e.getMessage());
+                result = amazonS3Client.putObject(bucket, s3FileName.toString(), file.getInputStream(), objectMetadata);
+            } catch (Exception e) {
+                throw new UnHandledUserException(e.getMessage());
             }
+            log.info("result : {}", result.getETag());
+            this.saveFile(file, s3FileName, fileTypeEnum);
 
         });
+
 
     }
 
     /**
-     *
-     * @param file 저장하려는 파일
+     * @param file       저장하려는 파일
      * @param s3FileName 저장하려는 파일의 s3 이름
      * @description 파일 디비 단일 save
      */
@@ -99,7 +102,6 @@ public class FileService {
     }
 
     /**
-     *
      * @param files 저장할 여러개의 파일
      * @description 여러개의 파일 bulk save
      */
@@ -137,8 +139,8 @@ public class FileService {
 
     @Transactional
     public ResponseEntity<ByteArrayResource> downloadFile(Long fileId) {
-        try{
-            Optional<FileEntity> fileEntity =  this.fileRepository.findById(fileId);
+        try {
+            Optional<FileEntity> fileEntity = this.fileRepository.findById(fileId);
             if (fileEntity.isEmpty()) {
                 throw new RestApiException(CommonErrorCode.BB_FILE_NOT_FOUND);
             }
@@ -150,8 +152,9 @@ public class FileService {
             httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             httpHeaders.setContentLength(fileStream.length);
             httpHeaders.setContentDispositionFormData("attachment", fileName);
-
-            return ResponseEntity.ok().headers(httpHeaders).body(new ByteArrayResource(fileStream));
+            ByteArrayResource res = new ByteArrayResource(fileStream);
+            return ResponseEntity.ok().headers(httpHeaders).body(res);
+//            return CommonApiResponse.toEntity(ResponseEntity.ok().headers(httpHeaders).body(res));
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new RestApiException(CommonErrorCode.BB_FILE_DOWNLOAD_FAIL);

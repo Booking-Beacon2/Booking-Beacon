@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BasicController {
     @GetMapping("health")
     public String healthCheck() {
+        log.info("Health check started");
         return "I am healthy";
     }
 }
