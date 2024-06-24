@@ -42,3 +42,5 @@ out/
 **/._.DS_Store
 
 .run
+
+secrets.md

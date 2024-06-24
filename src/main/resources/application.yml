@@ -34,9 +34,9 @@ jwt:
 cloud:
   aws:
     s3:
-      bucket: booking-beacon-dev
-      accessKey: ENC(XPFfJHOGYVbJyAWgoRdlEFtc2QzN9L4GW5Y8LIcWlVM=)
-      secretKey: ENC(JpXQFkq+IcgCJ7nPLGsNU6F0Ko5H+qtUysYTWEllgSYJ+TVJfUN+9njHtwYjDRbhubIU1T3GTmY=)
+      bucket: booking-beacon-s3-dev
+      accessKey: ENC(h2frLs6THDKN+1dJRlvcTjwtZyrREYNxRB+L7isu/Hc=)
+      secretKey: ENC(RiNrOIfArFNNMMPO9e5ArdaFDmT7NGTo+NRGpLnT1a/Le2XpKaHu/JAzsWyeUON38rtdQQZiSc8=)
       stack:
         auto: false
       region: ap-northeast-2

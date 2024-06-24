@@ -4,6 +4,7 @@ import com.bteam.Booking_Beacon.domain.booking.dto.RegisterMusicalReq;
 import com.bteam.Booking_Beacon.domain.booking.dto.RegisterMusicalRes;
 import com.bteam.Booking_Beacon.domain.booking.entity.MusicalEntity;
 import com.bteam.Booking_Beacon.domain.booking.service.BookingService;
+import com.bteam.Booking_Beacon.global.format.CommonApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;

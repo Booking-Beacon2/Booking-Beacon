@@ -6,6 +6,7 @@ import com.bteam.Booking_Beacon.domain.auth.dto.response.CreateUserRes;
 import com.bteam.Booking_Beacon.domain.auth.dto.response.TokenRes;
 import com.bteam.Booking_Beacon.domain.auth.entity.UserEntity;
 import com.bteam.Booking_Beacon.domain.auth.service.AuthService;
+import com.bteam.Booking_Beacon.global.format.CommonApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -49,11 +50,11 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    @Operation(summary = "로그인", responses = {
-            @ApiResponse(responseCode = "200", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = TokenRes.class))
-            })
-    })
+//    @Operation(summary = "로그인", responses = {
+//            @ApiResponse(responseCode = "200", content = {
+//                    @Content(mediaType = "application/json", schema = @Schema(implementation = TokenRes.class))
+//            })
+//    })
     public ResponseEntity<TokenRes> login(@Validated @RequestBody LoginReq loginReq, TokenRes tokenRes) {
         return this.authService.login(loginReq);
     }

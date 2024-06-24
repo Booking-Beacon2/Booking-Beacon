@@ -4,6 +4,8 @@ package com.bteam.Booking_Beacon.domain.booking.controller;
 import com.bteam.Booking_Beacon.domain.booking.common.FileTypeEnum;
 import com.bteam.Booking_Beacon.domain.booking.service.FileService;
 import com.bteam.Booking_Beacon.global.exception.RestApiException;
+import com.bteam.Booking_Beacon.global.exception.UnHandledUserException;
+import com.bteam.Booking_Beacon.global.format.CommonApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,17 +31,13 @@ public class FileController {
 
     @PostMapping(value = "files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "파일 업로드")
-    public void uploadFile(@RequestParam("files") List<MultipartFile> files, @RequestParam("type") FileTypeEnum fileTypeEnum){
-        try {
-            this.fileService.uploadFile(files, fileTypeEnum);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new RestApiException(CommonErrorCode.BB_FILE_UPLOAD_FAIL);
-        }
+    public void uploadFile(@RequestParam("files") List<MultipartFile> files, @RequestParam("type") FileTypeEnum fileTypeEnum) {
+        this.fileService.uploadFile(files, fileTypeEnum);
     }
+
     @GetMapping(value = "files", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @Operation(summary = "파일 다운로드")
-    public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam("fileId") Long fileId)  {
+    public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam("fileId") Long fileId) {
         return this.fileService.downloadFile(fileId);
     }
 }
