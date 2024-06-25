@@ -2,6 +2,7 @@ package com.bteam.Booking_Beacon.domain.booking.service;
 
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -70,7 +71,8 @@ public class FileService {
             PutObjectResult result = null;
             try {
                 result = amazonS3Client.putObject(bucket, s3FileName.toString(), file.getInputStream(), objectMetadata);
-            } catch (Exception e) {
+            } catch (SdkClientException | IOException e) {
+                log.info(e.getClass().getName());
                 throw new UnHandledUserException(e.getMessage());
             }
             log.info("result : {}", result.getETag());
@@ -167,7 +169,7 @@ public class FileService {
         S3ObjectInputStream objectInputStream = s3Object.getObjectContent();
         try {
             return IOUtils.toByteArray(objectInputStream);
-        } catch (IOException e) {
+        } catch (IOException | SdkClientException e) {
             log.error(e.getMessage());
             throw new UnHandledUserException(e.getMessage());
         }

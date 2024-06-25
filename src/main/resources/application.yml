@@ -1,12 +1,11 @@
 # application.yml
+# local
 server:
   port: 8080
 
 spring:
   application:
     name: booking-service
-#  profiles:
-#    default: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:54329/bteam
@@ -34,7 +33,7 @@ jwt:
 cloud:
   aws:
     s3:
-      bucket: booking-beacon-s3-dev
+      bucket: booking-beacon-s3-dev2
       accessKey: ENC(h2frLs6THDKN+1dJRlvcTjwtZyrREYNxRB+L7isu/Hc=)
       secretKey: ENC(RiNrOIfArFNNMMPO9e5ArdaFDmT7NGTo+NRGpLnT1a/Le2XpKaHu/JAzsWyeUON38rtdQQZiSc8=)
       stack:
