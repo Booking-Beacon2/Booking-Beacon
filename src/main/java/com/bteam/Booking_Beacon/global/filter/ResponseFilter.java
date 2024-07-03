@@ -3,6 +3,8 @@ package com.bteam.Booking_Beacon.global.filter;
 
 import jakarta.servlet.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.util.Date;
 
 @Slf4j
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ResponseFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -21,6 +24,7 @@ public class ResponseFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         // 처리 전
         Date startDate = new Date();
+        log.info("[Time] request at {}", startDate);
         filterChain.doFilter(servletRequest, servletResponse);
         Date endDate = new Date();
         // 처리 후
@@ -31,4 +35,5 @@ public class ResponseFilter implements Filter {
     public void destroy() {
         Filter.super.destroy();
     }
+
 }

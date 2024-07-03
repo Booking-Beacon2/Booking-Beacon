@@ -1,13 +1,20 @@
 package com.bteam.Booking_Beacon.global.filter;
 
+import com.bteam.Booking_Beacon.global.exception.CommonErrorCode;
+import com.bteam.Booking_Beacon.global.exception.UnHandledUserException;
 import com.bteam.Booking_Beacon.global.jwt.CustomUserDetailsService;
 import com.bteam.Booking_Beacon.global.jwt.JwtUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +26,7 @@ import java.io.IOException;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Order(1)
 public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilter -> 한 번 실행 보장
 
     private final CustomUserDetailsService customUserDetailsService;
@@ -33,6 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
 
         Long userId = 0L;
         //JWT가 헤더에 있는 경우
+
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);
             //JWT 유효성 검증
@@ -57,5 +66,7 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
         // 여기까지 request filter
         filterChain.doFilter(request, response); // request, response 기준점
         // 여기부터 response filter
+
+
     }
 }

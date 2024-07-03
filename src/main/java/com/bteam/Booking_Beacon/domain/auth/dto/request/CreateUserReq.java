@@ -1,6 +1,8 @@
 package com.bteam.Booking_Beacon.domain.auth.dto.request;
 
 import com.bteam.Booking_Beacon.domain.auth.entity.UserEntity;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,8 +13,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class CreateUserReq {
+    @NotNull
     private String userName;
+
+    @NotNull
     private String password;
+
+    @Email
+    @NotNull
     private String userEmail;
 
     public UserEntity toEntity() {

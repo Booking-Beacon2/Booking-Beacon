@@ -10,6 +10,9 @@ public enum CommonErrorCode implements ErrorCode{
     /**
      * BB prefix error : rest api exception
      */
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Invalid token"),
+    UNEXPECTED_TYPE_ERROR(HttpStatus.BAD_REQUEST, "Unexpected type error"),
+    METHOD_ARG_NOT_VALID(HttpStatus.BAD_REQUEST, "method argument not valid"),
     INVALID_PARAMETER(HttpStatus.BAD_REQUEST, "Invalid parameter included"),
     INVALID_HTTP_METHOD(HttpStatus.METHOD_NOT_ALLOWED, "Invalid HTTP method"),
     BB_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다"),

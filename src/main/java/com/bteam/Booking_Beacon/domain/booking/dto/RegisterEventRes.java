@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 @Getter
-public class RegisterMusicalRes {
+public class RegisterEventRes {
     private Long musicalId;
+    private Long concertId;
 }
