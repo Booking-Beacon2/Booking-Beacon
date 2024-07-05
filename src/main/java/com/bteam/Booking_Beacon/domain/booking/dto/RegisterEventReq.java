@@ -20,19 +20,18 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 public class RegisterEventReq {
+    //    @NotBlank(message = "title should not empty")
     private String title;
     private String description;
     private Integer capacity;
     private Timestamp endDate;
-    @NotBlank(message = "The eventType is required.")
     /**
      * 원시타입이 아닌 경우, 자체적으로 valid error 를 제공하지 않기 때문에 따로 만들어줘야 한다.
      */
-    @ValidEnum(enumClass = EventType.class)
+    @ValidEnum
     private EventType eventType;
 
     /**
-     *
      * @return 테이블에 삽입할 대상들
      * dto 에서 entity 로 전환해주는 변환기 역할
      */

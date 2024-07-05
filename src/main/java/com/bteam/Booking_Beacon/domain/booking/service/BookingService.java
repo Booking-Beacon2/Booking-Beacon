@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Service
@@ -26,10 +27,10 @@ public class BookingService {
     public ResponseEntity<RegisterEventRes> registerBookingEvents(RegisterEventReq registerEventReq) {
         log.info(String.valueOf(registerEventReq.getEventType()));
         RegisterEventRes res = null;
-        if(registerEventReq.getEventType() == EventType.MUSICAL){
+        if(Objects.equals(registerEventReq.getEventType(), EventType.MUSICAL.toString())){
             Long musicalId = this.musicalRepository.save(registerEventReq.toMusicalEntity()).getMusicalId();
             res = RegisterEventRes.builder().musicalId(musicalId).build();
-        } else if (registerEventReq.getEventType() == EventType.CONCERT) {
+        } else if (Objects.equals(registerEventReq.getEventType(), EventType.CONCERT.toString())) {
             Long concertId = this.concertRepository.save(registerEventReq.toConcertEntity()).getConcertId();
             res = RegisterEventRes.builder().concertId(concertId).build();
         }

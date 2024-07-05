@@ -1,8 +1,10 @@
 package com.bteam.Booking_Beacon.global.exception;
 
 import jakarta.validation.UnexpectedTypeException;
+import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +51,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     protected final ResponseEntity<Object> handleAllExceptions(Exception ex) {
         log.info("Exception");
+        log.info(Arrays.toString(new Class[]{ex.getClass()}));
         ErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
+        String stackTrace = String.valueOf(Arrays.stream(ex.getStackTrace()).findFirst());
+        return handleExceptionInternal(errorCode, ex.getMessage(), stackTrace);
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    protected final ResponseEntity<Object> handleValidationException(ValidationException ex) {
+        log.info("ValidationException");
+        log.info(ex.getMessage());
+        ErrorCode errorCode = CommonErrorCode.VALIDATION_ERROR;
         String stackTrace = String.valueOf(Arrays.stream(ex.getStackTrace()).findFirst());
         return handleExceptionInternal(errorCode, ex.getMessage(), stackTrace);
     }
@@ -64,6 +76,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(errorCode, ex.getMessage(), stackTrace);
     }
 
+
+
     @ExceptionHandler(UnexpectedTypeException.class)
     protected final ResponseEntity<Object> handleUnexpectedTypeException(UnexpectedTypeException ex) {
         log.info("UnexpectedTypeException");
@@ -71,7 +85,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String stackTrace = String.valueOf(Arrays.stream(ex.getStackTrace()).findFirst());
         return handleExceptionInternal(errorCode, ex.getMessage(), stackTrace);
     }
-
 
     // 잘못된 http method
     @Override
@@ -90,6 +103,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String stackTrace = String.valueOf(Arrays.stream(ex.getStackTrace()).findFirst());
         return handleExceptionInternal(errorCode, ex.getMessage(), stackTrace);
     }
+
+
 
     /*
 
