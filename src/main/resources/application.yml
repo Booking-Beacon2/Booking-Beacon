@@ -33,7 +33,7 @@ jwt:
 cloud:
   aws:
     s3:
-      bucket: booking-beacon-s3-dev2
+      bucket: booking-beacon-s3-dev
       accessKey: ENC(h2frLs6THDKN+1dJRlvcTjwtZyrREYNxRB+L7isu/Hc=)
       secretKey: ENC(RiNrOIfArFNNMMPO9e5ArdaFDmT7NGTo+NRGpLnT1a/Le2XpKaHu/JAzsWyeUON38rtdQQZiSc8=)
       stack:

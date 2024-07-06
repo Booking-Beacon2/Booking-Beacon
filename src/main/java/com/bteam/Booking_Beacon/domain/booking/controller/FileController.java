@@ -2,6 +2,7 @@ package com.bteam.Booking_Beacon.domain.booking.controller;
 
 
 import com.bteam.Booking_Beacon.domain.booking.common.FileTypeEnum;
+import com.bteam.Booking_Beacon.domain.booking.dto.UploadFileRes;
 import com.bteam.Booking_Beacon.domain.booking.service.FileService;
 import com.bteam.Booking_Beacon.global.exception.RestApiException;
 import com.bteam.Booking_Beacon.global.exception.UnHandledUserException;
@@ -31,8 +32,8 @@ public class FileController {
 
     @PostMapping(value = "files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "파일 업로드")
-    public void uploadFile(@RequestParam("files") List<MultipartFile> files, @RequestParam("type") FileTypeEnum fileTypeEnum) {
-        this.fileService.uploadFile(files, fileTypeEnum);
+    public ResponseEntity<UploadFileRes> uploadFile(@RequestParam("files") List<MultipartFile> files, @RequestParam("type") FileTypeEnum fileTypeEnum) {
+        return this.fileService.uploadFile(files, fileTypeEnum);
     }
 
     @GetMapping(value = "files", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

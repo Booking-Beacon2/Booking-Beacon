@@ -1,5 +1,6 @@
 package com.bteam.Booking_Beacon.domain.booking.controller;
 
+import com.bteam.Booking_Beacon.domain.booking.dto.GetMusicalsRes;
 import com.bteam.Booking_Beacon.domain.booking.dto.RegisterEventReq;
 import com.bteam.Booking_Beacon.domain.booking.dto.RegisterEventRes;
 import com.bteam.Booking_Beacon.domain.booking.entity.MusicalEntity;
@@ -46,7 +47,7 @@ public class BookingController {
                     @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = MusicalEntity.class)))
             })
     })
-    public ResponseEntity<List<MusicalEntity>> getMusicalBookings() {
+    public ResponseEntity<List<GetMusicalsRes>> getMusicalBookings() {
         return this.bookingService.getMusicalBookings();
     }
 }

@@ -2,6 +2,7 @@ package com.bteam.Booking_Beacon.domain.booking.service;
 
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.Response;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -11,6 +12,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import com.bteam.Booking_Beacon.domain.booking.common.FileTypeEnum;
+import com.bteam.Booking_Beacon.domain.booking.dto.UploadFileRes;
 import com.bteam.Booking_Beacon.domain.booking.entity.FileEntity;
 import com.bteam.Booking_Beacon.domain.booking.repository.FileRepository;
 import com.bteam.Booking_Beacon.global.exception.CommonErrorCode;
@@ -46,7 +48,8 @@ public class FileService {
     private final AmazonS3Client amazonS3Client;
     private final FileRepository fileRepository;
 
-    public void uploadFile(List<MultipartFile> files, FileTypeEnum fileTypeEnum) {
+    public ResponseEntity<UploadFileRes> uploadFile(List<MultipartFile> files, FileTypeEnum fileTypeEnum) {
+        List<Long> fileIds = new ArrayList<>(); //list 선언
         files.forEach(file -> {
 
             if (!Objects.requireNonNull(file.getContentType()).startsWith("image")) {
@@ -76,10 +79,13 @@ public class FileService {
                 throw new UnHandledUserException(e.getMessage());
             }
             log.info("result : {}", result.getETag());
-            this.saveFile(file, s3FileName, fileTypeEnum);
+            Long fileId = this.saveFile(file, s3FileName, fileTypeEnum);
+            fileIds.add(fileId);
 
         });
+        UploadFileRes res = UploadFileRes.builder().fileId(fileIds).build();
 
+        return ResponseEntity.ok(res);
 
     }
 
@@ -88,7 +94,7 @@ public class FileService {
      * @param s3FileName 저장하려는 파일의 s3 이름
      * @description 파일 디비 단일 save
      */
-    private void saveFile(MultipartFile file, UUID s3FileName, FileTypeEnum fileTypeEnum) {
+    private Long saveFile(MultipartFile file, UUID s3FileName, FileTypeEnum fileTypeEnum) {
         String fileName = file.getOriginalFilename();
         assert fileName != null;
         String ext = fileName.substring(fileName.lastIndexOf(".")).split("\\.")[1];
@@ -100,7 +106,7 @@ public class FileService {
                         .extension(ext)
                         .type(fileTypeEnum)
                         .build();
-        this.fileRepository.save(fileEntity);
+        return this.fileRepository.save(fileEntity).getFileId();
     }
 
     /**

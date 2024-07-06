@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity()
 @NoArgsConstructor
@@ -39,6 +41,7 @@ public class MusicalEntity {
     @Column(nullable = false, name = "end_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp endDate;
+
 
     @Builder
     public MusicalEntity(String title, String description, Integer capacity, Timestamp endDate) {

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.util.Arrays;
+
 /**
  * ValidEnum: 어떤 annotation interface 를 사용할건지
  * Enum: 해당 annotation 이 어떤 타입의 validation 인지

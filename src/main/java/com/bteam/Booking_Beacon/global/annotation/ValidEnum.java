@@ -15,5 +15,5 @@ public @interface ValidEnum {
     String message() default "Invalid Enum"; // 오류 발생시 생성되는 메세지
     Class<?>[] groups() default {}; // 상황별 validation 을 제어하기 위함
     Class<? extends Payload>[] payload() default {}; // 심각도
-    Class<? extends java.lang.Enum> enumClass() default java.lang.Enum.class; // 해당 annotation 이 붙을 수 있는 범위 -> enum 에만 붙을 수 있다.
+    Class<? extends java.lang.Enum<?>> enumClass(); // 해당 annotation 이 붙을 수 있는 범위 -> enum 에만 붙을 수 있다.
 }

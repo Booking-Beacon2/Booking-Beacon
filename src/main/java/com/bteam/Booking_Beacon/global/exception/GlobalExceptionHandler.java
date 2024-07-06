@@ -57,6 +57,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(errorCode, ex.getMessage(), stackTrace);
     }
 
+    // @ValidEnum 으로 걸리는 경우
     @ExceptionHandler(ValidationException.class)
     protected final ResponseEntity<Object> handleValidationException(ValidationException ex) {
         log.info("ValidationException");

@@ -29,7 +29,8 @@ public enum CommonErrorCode implements ErrorCode{
     BB_FILE_NOT_IMAGE(HttpStatus.FORBIDDEN, "파일이 이미지 형태가 아닙니다."),
     BB_FILE_UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "파일 업로드에 실패했습니다."),
     BB_FILE_NOT_FOUND(HttpStatus.BAD_REQUEST, "파일이 존재하지 않습니다."),
-    BB_FILE_DOWNLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "파일 다운에 실패했습니다.")
+    BB_FILE_DOWNLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "파일 다운에 실패했습니다."),
+    BB_EVENT_FILE_ALREADY_UPLOADED(HttpStatus.BAD_REQUEST, "이미 등록된 파일입니다.")
     ;
 
     // 여기서 상속 받은 getName 이 enum 의 name 즉 USER_NOT_FOUND 를 가져온다.
