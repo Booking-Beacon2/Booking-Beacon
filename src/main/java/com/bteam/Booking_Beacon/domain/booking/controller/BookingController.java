@@ -44,7 +44,7 @@ public class BookingController {
     @GetMapping("musicals")
     @Operation(summary = "뮤지컬 리스트 조회", responses = {
             @ApiResponse(responseCode = "200", content = {
-                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = MusicalEntity.class)))
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = GetMusicalsRes.class)))
             })
     })
     public ResponseEntity<List<GetMusicalsRes>> getMusicalBookings() {
