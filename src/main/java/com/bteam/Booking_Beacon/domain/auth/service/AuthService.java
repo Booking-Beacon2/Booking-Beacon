@@ -4,6 +4,7 @@ import com.bteam.Booking_Beacon.domain.auth.dto.request.*;
 import com.bteam.Booking_Beacon.domain.auth.dto.response.CreatePartnerRes;
 import com.bteam.Booking_Beacon.domain.auth.dto.response.CreateUserRes;
 import com.bteam.Booking_Beacon.domain.auth.dto.response.TokenRes;
+import com.bteam.Booking_Beacon.domain.auth.dto.response.VerifyEmailRes;
 import com.bteam.Booking_Beacon.domain.auth.entity.PartnerEntity;
 import com.bteam.Booking_Beacon.domain.auth.entity.UserEntity;
 import com.bteam.Booking_Beacon.domain.auth.repository.PartnerRepository;
@@ -12,19 +13,20 @@ import com.bteam.Booking_Beacon.global.config.AuthConfig;
 import com.bteam.Booking_Beacon.global.exception.CommonErrorCode;
 import com.bteam.Booking_Beacon.global.exception.RestApiException;
 import com.bteam.Booking_Beacon.global.exception.UnHandledUserException;
-import com.bteam.Booking_Beacon.global.format.CommonApiResponse;
 import com.bteam.Booking_Beacon.global.jwt.JwtUtil;
 import com.bteam.Booking_Beacon.global.jwt.JwtUserInfo;
+import com.bteam.Booking_Beacon.global.util.EmailService;
+import com.bteam.Booking_Beacon.global.util.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Service
@@ -34,6 +36,19 @@ public class AuthService {
     private final PartnerRepository partnerRepository;
     private final JwtUtil jwtTokenUtil;
     private final AuthConfig authConfig;
+    private final RedisService redisService;
+    private final EmailService emailService;
+
+    /* 랜덤 인증 코드 생성 */
+    public String generateRandomAuthCode() {
+        Random r = new Random();
+        String randomNumber = "";
+        for(int i = 0; i < 6; i++) {
+            randomNumber += Integer.toString(r.nextInt(10));
+        }
+
+        return randomNumber;
+    }
 
     /**
      * @description  전체 유저 정보 조회
@@ -52,6 +67,34 @@ public class AuthService {
             throw new RestApiException(CommonErrorCode.BB_USER_NOT_FOUND);
         }
         return ResponseEntity.ok().body(user);
+    }
+
+    /**
+     * @description 인증 메일 전송
+     */
+    public ResponseEntity<VerifyEmailRes> sendVerifyEmail(String userEmail) {
+        UserEntity user = this.userRepository.findUserByEmail(userEmail);
+        if (user == null || user.getPassword().isEmpty()) {
+            throw new RestApiException(CommonErrorCode.BB_USER_NOT_FOUND);
+        }
+
+        String authCode = generateRandomAuthCode();
+        emailService.sendEmail(userEmail, "이메일 인증 코드입니다.", "3분 안에 인증번호 입력란에 아래 번호를 입력해 주세요.<br>" + authCode);
+        redisService.setValue("verify_" + userEmail, authCode, 180, TimeUnit.SECONDS );
+        return ResponseEntity.ok(VerifyEmailRes.builder().authCode(authCode).build());
+    }
+
+    public ResponseEntity<VerifyEmailRes> verifyEmailAuthCode(String userEmail) {
+        UserEntity user = this.userRepository.findUserByEmail(userEmail);
+        if (user == null || user.getUserEmail().isEmpty()) {
+            throw new RestApiException(CommonErrorCode.BB_USER_NOT_FOUND);
+        }
+
+        Object authCode = redisService.getValue("verify_" + userEmail);
+        if (authCode == null) {
+            throw new RestApiException(CommonErrorCode.BB_VERIFY_AUTH_CODE_NOT_FOUND);
+        }
+        return ResponseEntity.ok(VerifyEmailRes.builder().authCode(authCode.toString()).build());
     }
 
     /**

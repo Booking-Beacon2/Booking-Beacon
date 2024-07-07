@@ -24,6 +24,7 @@ public enum CommonErrorCode implements ErrorCode{
     NULL_POINTER(HttpStatus.INTERNAL_SERVER_ERROR, "Null pointer exception"),
     BB_PASSWORD_INCORRECT(HttpStatus.BAD_REQUEST, "Password incorrect"),
     BB_EMAIL_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다"),
+    BB_VERIFY_AUTH_CODE_NOT_FOUND(HttpStatus.BAD_REQUEST, "인증 코드 미발급 또는 인증 시간 초과입니다."),
     BB_PARTNER_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "동일 사업자번호로 등록된 파트너가 이미 존재합니다."),
     BB_PARTNER_NOT_FOUND(HttpStatus.NOT_FOUND, "파트너 정보가 존재하지 않습니다."),
     BB_FILE_NOT_IMAGE(HttpStatus.FORBIDDEN, "파일이 이미지 형태가 아닙니다."),

@@ -40,6 +40,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(
                 authorize -> authorize
                         .requestMatchers("/health").permitAll()
+                        .requestMatchers("/auth/verify/email").permitAll()
                         .requestMatchers("/auth/join").permitAll()
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/auth/info").permitAll()

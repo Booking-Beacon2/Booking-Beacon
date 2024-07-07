@@ -3,18 +3,16 @@ package com.bteam.Booking_Beacon.domain.beacon.stream.redis.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Objects;
-import java.util.Set;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RedisService {
+public class BeaconRedisService {
 
     private final RedisTemplate<String, String> redisTemplate;
 

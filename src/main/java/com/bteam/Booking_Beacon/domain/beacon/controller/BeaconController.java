@@ -3,7 +3,7 @@
 //
 //import com.bteam.Booking_Beacon.domain.beacon.dto.PickReq;
 //import com.bteam.Booking_Beacon.domain.beacon.stream.kafka.producer.KafkaProducer;
-//import com.bteam.Booking_Beacon.domain.beacon.stream.redis.service.RedisService;
+//import com.bteam.Booking_Beacon.domain.beacon.stream.redis.service.BeaconRedisService;
 //import com.bteam.Booking_Beacon.domain.beacon.stream.sse.SseService;
 //import com.fasterxml.jackson.core.JsonProcessingException;
 //import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@
 //@RequiredArgsConstructor
 //public class BeaconController {
 //    private final KafkaProducer kafkaProducer;
-//    private final RedisService redisService;
+//    private final BeaconRedisService beaconRedisService;
 //    private final SseService sseService;
 //
 //    @GetMapping("info")
@@ -38,12 +38,12 @@
 //    public void postWait(@RequestAttribute("userId") Long userId) throws JsonProcessingException {
 //        double dValue = Math.random();
 //        int randNum = (int)(dValue * 100);
-//        this.redisService.setRedis(userId.toString(), Integer.toString(randNum));
+//        this.beaconRedisService.setRedis(userId.toString(), Integer.toString(randNum));
 //    }
 //
 //    @GetMapping("wait")
 //    public void getWait(@RequestAttribute("userId") Long userId) throws JsonProcessingException {
-//        this.redisService.getRedis(userId.toString());
+//        this.beaconRedisService.getRedis(userId.toString());
 //    }
 //
 //    @GetMapping(value = "sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)

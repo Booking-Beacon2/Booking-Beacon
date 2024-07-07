@@ -4,6 +4,7 @@ import com.bteam.Booking_Beacon.domain.auth.dto.request.*;
 import com.bteam.Booking_Beacon.domain.auth.dto.response.CreatePartnerRes;
 import com.bteam.Booking_Beacon.domain.auth.dto.response.CreateUserRes;
 import com.bteam.Booking_Beacon.domain.auth.dto.response.TokenRes;
+import com.bteam.Booking_Beacon.domain.auth.dto.response.VerifyEmailRes;
 import com.bteam.Booking_Beacon.domain.auth.entity.UserEntity;
 import com.bteam.Booking_Beacon.domain.auth.service.AuthService;
 import com.bteam.Booking_Beacon.global.format.CommonApiResponse;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.models.media.MediaType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +49,18 @@ public class AuthController {
     @Operation(summary = "본인 정보 조회")
     public ResponseEntity<Optional<UserEntity>> getUser(@RequestAttribute("userId") Long userId) {
         return authService.getUser(userId);
+    }
+
+    @Operation(summary = "이메일 인증 코드 메일 발송 (body에 String email)")
+    @PostMapping("verify/email")
+    public ResponseEntity<VerifyEmailRes> sendVerifyEmail(@Validated @RequestBody String userEmail) {
+        return this.authService.sendVerifyEmail(userEmail);
+    }
+
+    @Operation(summary = "이메일 인증 코드 검증")
+    @GetMapping("verify/email")
+    public ResponseEntity<VerifyEmailRes> verifyEmailAuthCode(@Validated @RequestParam String email) {
+        return this.authService.verifyEmailAuthCode(email);
     }
 
     @PostMapping("login")

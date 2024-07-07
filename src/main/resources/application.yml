@@ -26,6 +26,14 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  mail:
+    host: smtp.gmail.com
+    username: ENC(WbmFP7v16wJ24QfMRhhjm9ajkQForg77RU+xm2nFs9Xb6OIG/qfQPQ==)
+    password: ENC(14KpaE20aWlGCEPWL7caEzi/G0gB+NM6xkMNDerAzTU=)
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
 jwt:
   secret: ENC(J75n9EXpmHVC4t/vYOHbORr73x394E69sYd7axyU/oMcDq6vP2s9FZ+utIKSEfusPbfOfz7sKcZk5jFgRyQ1d40mIGz64g5AGBDdQtnGeiM=)
   access-token-validity-in-seconds: 3000
