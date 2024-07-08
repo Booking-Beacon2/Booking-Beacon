@@ -74,8 +74,8 @@ public class AuthService {
      */
     public ResponseEntity<VerifyEmailRes> sendVerifyEmail(String userEmail) {
         UserEntity user = this.userRepository.findUserByEmail(userEmail);
-        if (user == null || user.getPassword().isEmpty()) {
-            throw new RestApiException(CommonErrorCode.BB_USER_NOT_FOUND);
+        if (user != null) {
+            throw new RestApiException(CommonErrorCode.BB_EMAIL_ALREADY_EXIST);
         }
 
         String authCode = generateRandomAuthCode();
@@ -86,8 +86,8 @@ public class AuthService {
 
     public ResponseEntity<VerifyEmailRes> verifyEmailAuthCode(String userEmail) {
         UserEntity user = this.userRepository.findUserByEmail(userEmail);
-        if (user == null || user.getUserEmail().isEmpty()) {
-            throw new RestApiException(CommonErrorCode.BB_USER_NOT_FOUND);
+        if (user != null) {
+            throw new RestApiException(CommonErrorCode.BB_EMAIL_ALREADY_EXIST);
         }
 
         Object authCode = redisService.getValue("verify_" + userEmail);
