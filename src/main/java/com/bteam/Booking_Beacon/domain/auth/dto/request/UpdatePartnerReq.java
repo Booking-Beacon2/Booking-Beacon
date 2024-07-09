@@ -6,11 +6,10 @@ import lombok.Getter;
 
 import java.util.Optional;
 
-@AllArgsConstructor
 @Builder
 @Getter
 public class UpdatePartnerReq {
-    private Optional<String> partnerName;
-    private Optional<String> ein;
-    private Optional<String> phoneNumber;
+    private final Optional<String> partnerName;
+    private final Optional<String> ein;
+    private final Optional<String> phoneNumber;
 }

@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.models.media.MediaType;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -53,8 +54,8 @@ public class AuthController {
 
     @Operation(summary = "이메일 인증 코드 메일 발송 (body에 String email)")
     @PostMapping("verify/email")
-    public ResponseEntity<VerifyEmailRes> sendVerifyEmail(@Validated @RequestBody String userEmail) {
-        return this.authService.sendVerifyEmail(userEmail);
+    public ResponseEntity<VerifyEmailRes> sendVerifyEmail(@Valid @RequestBody VerifyEmailReq verifyEmailReq) {
+        return this.authService.sendVerifyEmail(verifyEmailReq.getUserEmail());
     }
 
     @Operation(summary = "이메일 인증 코드 검증")
@@ -64,11 +65,11 @@ public class AuthController {
     }
 
     @PostMapping("login")
-//    @Operation(summary = "로그인", responses = {
-//            @ApiResponse(responseCode = "200", content = {
-//                    @Content(mediaType = "application/json", schema = @Schema(implementation = TokenRes.class))
-//            })
-//    })
+    @Operation(summary = "로그인", responses = {
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = TokenRes.class))
+            })
+    })
     public ResponseEntity<TokenRes> login(@Validated @RequestBody LoginReq loginReq, TokenRes tokenRes) {
         return this.authService.login(loginReq);
     }

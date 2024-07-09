@@ -8,9 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter // 실제 입력 필드 값을 매핑해주는 역할을 한다
 @AllArgsConstructor
+@Setter
 @Builder
 public class CreateUserReq {
     @NotNull
