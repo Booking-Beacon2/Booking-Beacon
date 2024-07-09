@@ -1,13 +1,20 @@
 package com.bteam.Booking_Beacon.domain.auth.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Getter
-@AllArgsConstructor
-@Builder
+//@NoArgsConstructor
 public class VerifyEmailReq {
-    private String userEmail;
-//    private String password;
+    @NotNull
+    private final String userEmail;
+
+    /*
+    생성자
+     */
+    @JsonCreator
+    VerifyEmailReq(String userEmail) {
+        this.userEmail = userEmail;
+    }
 }

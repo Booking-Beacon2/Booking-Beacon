@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Builder
 @Getter
 public class UpdateUserReq {
-    private Long userId;
-    private String userName;
-    private String password;
-    private String userEmail;
+    private final Long userId;
+    private final String userName;
+    private final String password;
+    private final String userEmail;
 }

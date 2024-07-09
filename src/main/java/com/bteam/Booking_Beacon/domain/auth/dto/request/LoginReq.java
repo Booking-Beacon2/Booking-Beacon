@@ -5,9 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 @Builder
 public class LoginReq {
-    private String userEmail;
-    private String password;
+    private final String userEmail;
+    private final String password;
 }
