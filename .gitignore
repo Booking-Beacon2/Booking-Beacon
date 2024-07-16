@@ -44,3 +44,5 @@ out/
 .run
 
 secrets.md
+
+redis/data/dump.rdb

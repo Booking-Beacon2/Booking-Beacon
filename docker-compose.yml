@@ -4,13 +4,12 @@ networks:
     driver: bridge
 
 services:
-  booking-beacon:
-    image: 381492090552.dkr.ecr.ap-northeast-2.amazonaws.com/booking-beacon:booking-beacon
+  redis:
+    image: redis:latest
     ports:
-      - 8080:8080
-    container_name: booking-beacon-container
-    networks:
-      - booking-beacon-network
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
-      JASYPT_PASSWORD: bteam-booking-beacon
+      - "6379:6379"
+    command: redis-server /usr/local/conf/redis.conf
+    volumes:
+      - ./redis/data:/data
+      - ./redis/conf/redis.conf:/usr/local/conf/redis.conf
+    restart: always
