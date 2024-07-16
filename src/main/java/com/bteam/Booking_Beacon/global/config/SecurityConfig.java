@@ -41,6 +41,7 @@ public class SecurityConfig {
                 authorize -> authorize
                         .requestMatchers("/health").permitAll()
                         .requestMatchers("/auth/verify/email").permitAll()
+                        .requestMatchers("/auth/refresh-token").permitAll()
                         .requestMatchers("/auth/join").permitAll()
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/auth/info").permitAll()

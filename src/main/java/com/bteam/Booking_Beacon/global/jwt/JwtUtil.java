@@ -9,29 +9,33 @@ import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Objects;
 
 @Slf4j
 @Component
 public class JwtUtil {
     private final Key key;
-    private final long tokenValidityInSeconds;
+    private final long accessTokenValidityInSeconds;
+    private final long refreshTokenValidityInSeconds;
 
-    public JwtUtil(@Value("${jwt.secret}")String secretKey, @Value("${jwt.access-token-validity-in-seconds}") long tokenValidityInSeconds) {
+    public JwtUtil(@Value("${jwt.secret}")String secretKey, @Value("${jwt.access-token-validity-in-seconds}") long accessTokenValidityInSeconds, @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInSeconds) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
-        this.tokenValidityInSeconds = tokenValidityInSeconds;
+        this.accessTokenValidityInSeconds = accessTokenValidityInSeconds;
+        this.refreshTokenValidityInSeconds = refreshTokenValidityInSeconds;
     }
 
     /**
      * 토큰 생성
      */
-    public String createToken(JwtUserInfo jwtUserInfo) {
+    public String createToken(JwtUserInfo jwtUserInfo, String tokenType) {
         Claims claims = Jwts.claims();
         claims.put("userId", jwtUserInfo.getUserId());
         claims.put("username", jwtUserInfo.getUsername());
 
         long now = (new Date()).getTime();
-        Date expiration = new Date(now + tokenValidityInSeconds * 1000);
+        long validityInSeconds = Objects.equals(tokenType, "access") ? accessTokenValidityInSeconds : Objects.equals(tokenType, "refresh") ? refreshTokenValidityInSeconds : 0;
+        Date expiration = new Date(now + validityInSeconds * 1000);
 
         return Jwts.builder().setClaims(claims).setExpiration(expiration).signWith(SignatureAlgorithm.HS256, key).compact();
     }
@@ -55,7 +59,8 @@ public class JwtUtil {
         Claims claims = parseToken(token);
         long userId = claims.get("userId", Long.class);
         String username = claims.get("username", String.class);
-        return JwtUserInfo.builder().userId(userId).username(username).build();
+        long exp = claims.get("exp", Long.class);
+        return JwtUserInfo.builder().userId(userId).username(username).exp(exp).build();
     }
 
     /**

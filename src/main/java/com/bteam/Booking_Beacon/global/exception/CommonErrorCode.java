@@ -12,6 +12,7 @@ public enum CommonErrorCode implements ErrorCode{
      */
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "Validation Error"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Invalid token"),
+    TOKEN_EXPIRATION(HttpStatus.UNAUTHORIZED, "Token has expired"),
     UNEXPECTED_TYPE_ERROR(HttpStatus.BAD_REQUEST, "Unexpected type error"),
     METHOD_ARG_NOT_VALID(HttpStatus.BAD_REQUEST, "method argument not valid"),
     INVALID_PARAMETER(HttpStatus.BAD_REQUEST, "Invalid parameter included"),

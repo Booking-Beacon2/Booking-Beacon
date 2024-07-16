@@ -35,7 +35,8 @@ spring:
 
 jwt:
   secret: ENC(J75n9EXpmHVC4t/vYOHbORr73x394E69sYd7axyU/oMcDq6vP2s9FZ+utIKSEfusPbfOfz7sKcZk5jFgRyQ1d40mIGz64g5AGBDdQtnGeiM=)
-  access-token-validity-in-seconds: 3000
+  access-token-validity-in-seconds: 3600
+  refresh-token-validity-in-seconds: 86400
 
 cloud:
   aws:

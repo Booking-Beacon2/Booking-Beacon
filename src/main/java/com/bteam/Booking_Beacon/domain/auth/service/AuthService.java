@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -113,13 +114,35 @@ public class AuthService {
 
         JwtUserInfo jwtUserInfo = JwtUserInfo.builder().userId(user.getUserId()).username(user.getUserName()).build();
 
-        String token = this.jwtTokenUtil.createToken(jwtUserInfo);
+        String accessToken = this.jwtTokenUtil.createToken(jwtUserInfo, "access");
+        String refreshToken = this.jwtTokenUtil.createToken(jwtUserInfo, "refresh");
         TokenRes tokenRes = TokenRes
                 .builder()
-                .accessToken(token)
-                .refreshToken("sample refresh token")
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
 
+        return ResponseEntity.ok(tokenRes);
+    }
+
+    /**
+     * @description refresh access token
+     */
+    public ResponseEntity<TokenRes> refreshAccessToken(String refreshToken) {
+        JwtUserInfo userInfo = this.jwtTokenUtil.getUserFromToken(refreshToken);
+
+        long now = (new Date()).getTime();
+        long exp = userInfo.getExp();
+
+        if (now > exp) {
+            throw new RestApiException(CommonErrorCode.TOKEN_EXPIRATION);
+        }
+
+        JwtUserInfo jwtUserInfo = JwtUserInfo.builder().userId(userInfo.getUserId()).username(userInfo.getUsername()).build();
+        String access = this.jwtTokenUtil.createToken(jwtUserInfo, "access");
+        String refresh = this.jwtTokenUtil.createToken(jwtUserInfo, "refresh");
+
+        TokenRes tokenRes = TokenRes.builder().accessToken(access).refreshToken(refresh).build();
         return ResponseEntity.ok(tokenRes);
     }
 

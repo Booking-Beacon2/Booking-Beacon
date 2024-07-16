@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Date;
+
 /**
  * @description 토큰에 담을 정보
  * @ 토큰 DTO
@@ -14,4 +16,5 @@ import lombok.Getter;
 public class JwtUserInfo {
     private Long userId;
     private String username;
+    private Long exp;
 }

@@ -52,7 +52,7 @@ public class AuthController {
         return authService.getUser(userId);
     }
 
-    @Operation(summary = "이메일 인증 코드 메일 발송 (body에 String email)")
+    @Operation(summary = "이메일 인증 코드 메일 발송")
     @PostMapping("verify/email")
     public ResponseEntity<VerifyEmailRes> sendVerifyEmail(@Valid @RequestBody VerifyEmailReq verifyEmailReq) {
         return this.authService.sendVerifyEmail(verifyEmailReq.getUserEmail());
@@ -72,6 +72,15 @@ public class AuthController {
     })
     public ResponseEntity<TokenRes> login(@Validated @RequestBody LoginReq loginReq, TokenRes tokenRes) {
         return this.authService.login(loginReq);
+    }
+
+    @PostMapping("refresh-token")
+    @Operation(summary = "token refresh with refreshToken", responses = {@ApiResponse(responseCode = "200", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = TokenRes.class))
+        })
+    })
+    public ResponseEntity<TokenRes> refreshAccessToken(@Validated  @RequestBody RefreshAccessTokenReq refreshAccessTokenReq) {
+        return this.authService.refreshAccessToken(refreshAccessTokenReq.getRefreshToken());
     }
 
     @GetMapping("user-error")
