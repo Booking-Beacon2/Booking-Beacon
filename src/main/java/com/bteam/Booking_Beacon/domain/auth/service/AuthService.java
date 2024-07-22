@@ -74,8 +74,8 @@ public class AuthService {
      * @description 인증 메일 전송
      */
     public ResponseEntity<VerifyEmailRes> sendVerifyEmail(String userEmail) {
-        UserEntity user = this.userRepository.findUserByEmail(userEmail);
-        if (user != null) {
+        boolean isExistsUser = this.userRepository.findUserByEmail(userEmail).isPresent();
+        if (isExistsUser) {
             throw new RestApiException(CommonErrorCode.BB_EMAIL_ALREADY_EXIST);
         }
 
@@ -86,8 +86,8 @@ public class AuthService {
     }
 
     public ResponseEntity<VerifyEmailRes> verifyEmailAuthCode(String userEmail) {
-        UserEntity user = this.userRepository.findUserByEmail(userEmail);
-        if (user != null) {
+        boolean isExistsUser = this.userRepository.findUserByEmail(userEmail).isPresent();
+        if (isExistsUser) {
             throw new RestApiException(CommonErrorCode.BB_EMAIL_ALREADY_EXIST);
         }
 
@@ -103,10 +103,7 @@ public class AuthService {
      * @description 로그인
      */
     public ResponseEntity<TokenRes> login(LoginReq loginReq) {
-        UserEntity user = this.userRepository.findUserByEmail(loginReq.getUserEmail());
-        if (user == null || user.getPassword().isEmpty()) {
-            throw new RestApiException(CommonErrorCode.BB_USER_NOT_FOUND);
-        }
+        UserEntity user = this.userRepository.findUserByEmail(loginReq.getUserEmail()).orElseThrow(() -> new RestApiException(CommonErrorCode.BB_USER_NOT_FOUND));
 
         if (!authConfig.passwordEncoder().matches(loginReq.getPassword(), user.getPassword())) {
             throw new RestApiException(CommonErrorCode.BB_PASSWORD_INCORRECT);
@@ -164,8 +161,8 @@ public class AuthService {
      */
     @Transactional
     public ResponseEntity<CreateUserRes> createUser(CreateUserReq createUserReq) {
-        UserEntity user = this.userRepository.findUserByEmail(createUserReq.getUserEmail());
-        if (user != null) {
+        boolean isExistsUser = this.userRepository.findUserByEmail(createUserReq.getUserEmail()).isPresent();
+        if (isExistsUser) {
             throw new RestApiException(CommonErrorCode.BB_EMAIL_ALREADY_EXIST);
         }
 
@@ -191,17 +188,29 @@ public class AuthService {
         userEntity.setUserName(updateUserReq.getUserName());
     }
 
-    /** @description 파트너 등록 */
+    /** @description 파트너 회원가입 */
     @Transactional
-    public ResponseEntity<CreatePartnerRes> createPartner(Long userId, CreatePartnerReq createPartnerReq) {
-        PartnerEntity partner = this.partnerRepository.findPartnerByEin(createPartnerReq.getEin());
+    public ResponseEntity<CreatePartnerRes> createPartner(CreatePartnerReq createPartnerReq) {
+        boolean isExistsUser = userRepository.findUserByEmail(createPartnerReq.getUserEmail()).isPresent();
+        if (isExistsUser) {
+            throw new RestApiException(CommonErrorCode.BB_EMAIL_ALREADY_EXIST);
+        }
 
-        if (partner != null) {
+        boolean isExistsPartner = partnerRepository.findPartnerByEin(createPartnerReq.getEin()).isPresent();
+        if (isExistsPartner) {
             throw new RestApiException(CommonErrorCode.BB_PARTNER_ALREADY_EXIST);
         }
 
-        UserEntity user = this.userRepository.findById(userId)
-                .orElseThrow(() -> new RestApiException(CommonErrorCode.BB_USER_NOT_FOUND));
+        String encryptedPassword = authConfig.passwordEncoder().encode(createPartnerReq.getPassword());
+        createPartnerReq.setPassword(encryptedPassword);
+
+        UserEntity userEntity = UserEntity.builder()
+                .userName(createPartnerReq.getUserName())
+                .userEmail(createPartnerReq.getUserEmail())
+                .password(createPartnerReq.getPassword())
+                .build();
+
+        UserEntity user = this.userRepository.save(userEntity);
 
         PartnerEntity partnerEntity = PartnerEntity.builder()
                 .partnerName(createPartnerReq.getPartnerName())

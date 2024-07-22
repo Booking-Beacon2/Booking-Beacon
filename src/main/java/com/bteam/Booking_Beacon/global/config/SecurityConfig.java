@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/verify/email").permitAll()
                         .requestMatchers("/auth/refresh-token").permitAll()
                         .requestMatchers("/auth/join").permitAll()
+                        .requestMatchers("/auth/join-partner").permitAll()
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/auth/info").permitAll()
                         .requestMatchers("/api-docs/**").permitAll()

@@ -94,7 +94,7 @@ public class AuthController {
     }
 
     @PostMapping("join")
-    @Operation(summary = "회원가입")
+    @Operation(summary = "개인 회원가입")
     public ResponseEntity<CreateUserRes> createUser(@RequestBody CreateUserReq createUserReq) {
         return this.authService.createUser(createUserReq);
     }
@@ -106,12 +106,14 @@ public class AuthController {
     }
 
     /***** PARTNER *****/
-    @PostMapping("partner")
-    public ResponseEntity<CreatePartnerRes> createPartner(@RequestAttribute("userId") Long userId, @RequestBody CreatePartnerReq createPartnerReq) {
-        return this.authService.createPartner(userId, createPartnerReq);
+    @PostMapping("join-partner")
+    @Operation(summary = "파트너 회원가입")
+    public ResponseEntity<CreatePartnerRes> createPartner(@RequestBody CreatePartnerReq createPartnerReq) {
+        return this.authService.createPartner(createPartnerReq);
     }
 
     @PutMapping("partner")
+    @Operation(summary = "파트너 정보 수정")
     public void updatePartner(@RequestAttribute("userId") Long userId, @RequestBody UpdatePartnerReq updatePartnerReq) {
         this.authService.updatePartner(userId, updatePartnerReq);
     }

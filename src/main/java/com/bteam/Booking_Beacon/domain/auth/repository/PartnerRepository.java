@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface PartnerRepository extends JpaRepository<PartnerEntity, Long> {
     @Query(value = "select * from partner where ein = ?1", nativeQuery = true)
-    PartnerEntity findPartnerByEin(String ein);
+    Optional<PartnerEntity> findPartnerByEin(String ein);
 
     @Query(value =  "select * from partner where user_id = ?1", nativeQuery = true)
     Optional<PartnerEntity> findPartnerByUserId(Long userId);
