@@ -9,7 +9,7 @@ import java.util.Optional;
 @Builder
 @Getter
 public class UpdatePartnerReq {
-    private final Optional<String> partnerName;
-    private final Optional<String> ein;
-    private final Optional<String> phoneNumber;
+    private final String partnerName;
+    private final String ein;
+    private final String phoneNumber;
 }

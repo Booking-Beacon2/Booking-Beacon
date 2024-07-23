@@ -1,5 +1,6 @@
 package com.bteam.Booking_Beacon.domain.auth.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
@@ -23,12 +24,18 @@ public class PartnerEntity {
     @Column(nullable = false, name = "partner_id")
     private Long partnerId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="userId")
-    private UserEntity user;
-
     @Column(nullable = false, length = 100, name = "partner_name")
     private String partnerName;
+
+    @Column(nullable = false, length = 50, name = "user_name")
+    private  String userName;
+
+    @Column(nullable = false, length = 50, name = "email")
+    private String email;
+
+    @Column(nullable = false, length = 100, name = "password")
+    @JsonIgnore
+    private String password;
 
     @Column(nullable = false, length = 10, name = "ein")
     @Pattern(regexp = "\\d+", message = "Must contain only numeric characters")
@@ -44,9 +51,11 @@ public class PartnerEntity {
     private Timestamp createdDate;
 
     @Builder
-    public PartnerEntity(String partnerName, UserEntity user, String ein, String phoneNumber) {
+    public PartnerEntity(String partnerName, String userName, String email, String password, String ein, String phoneNumber) {
+        this.email = email;
+        this.password = password;
         this.partnerName = partnerName;
-        this.user = user;
+        this.userName = userName;
         this.ein = ein;
         this.phoneNumber = phoneNumber;
     }

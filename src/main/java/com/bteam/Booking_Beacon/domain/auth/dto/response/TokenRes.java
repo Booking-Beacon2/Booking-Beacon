@@ -8,7 +8,6 @@ import lombok.Getter;
 @Builder
 @Getter
 public class TokenRes {
-    private String grantType;
     private String accessToken;
     private String refreshToken;
 }

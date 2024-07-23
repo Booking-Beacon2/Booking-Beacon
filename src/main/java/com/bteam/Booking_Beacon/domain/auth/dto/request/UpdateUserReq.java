@@ -3,12 +3,14 @@ package com.bteam.Booking_Beacon.domain.auth.dto.request;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Optional;
 
 @Builder
 @Getter
+@Setter
 public class UpdateUserReq {
-    private final Long userId;
-    private final String userName;
-    private final String password;
-    private final String userEmail;
+    private String userName;
+    private String password;
 }

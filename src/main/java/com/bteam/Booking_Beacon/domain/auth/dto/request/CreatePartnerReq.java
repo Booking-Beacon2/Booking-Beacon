@@ -11,14 +11,13 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 @Setter
 public class CreatePartnerReq {
-    private final String userEmail;
-    private  String userName;
+    private final String email;
     private String password;
-
-    private final String partnerName;
+    private String userName;
+    private String partnerName;
 
     @Length(min = 10, max = 10)
     private final String ein;
 
-    private final String phoneNumber;
+    private String phoneNumber;
 }

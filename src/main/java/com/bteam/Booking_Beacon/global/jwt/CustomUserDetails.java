@@ -10,7 +10,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    private final JwtUserInfo JwtUserInfo;
+    private final JwtPayload JwtPayload;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -18,9 +18,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return "";
-    }
+    public String getPassword() { return ""; }
 
     @Override
     public String getUsername() {

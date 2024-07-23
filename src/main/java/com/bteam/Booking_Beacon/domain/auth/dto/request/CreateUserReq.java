@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 @Getter // 실제 입력 필드 값을 매핑해주는 역할을 한다
 @AllArgsConstructor
@@ -21,13 +22,18 @@ public class CreateUserReq {
 
     @Email
     @NotNull
-    private String userEmail;
+    private String email;
+
+    @NotNull
+    @Length(max = 11)
+    private String phoneNumber;
 
     public UserEntity toEntity() {
         return UserEntity.builder()
-                .userEmail(userEmail)
+                .email(email)
                 .password(password)
                 .userName(userName)
+                .phoneNumber(phoneNumber)
                 .build();
     }
 

@@ -1,20 +1,16 @@
 package com.bteam.Booking_Beacon.global.filter;
 
-import com.bteam.Booking_Beacon.global.exception.CommonErrorCode;
-import com.bteam.Booking_Beacon.global.exception.UnHandledUserException;
+import com.bteam.Booking_Beacon.global.constant.UserType;
 import com.bteam.Booking_Beacon.global.jwt.CustomUserDetailsService;
+import com.bteam.Booking_Beacon.global.jwt.JwtPayload;
 import com.bteam.Booking_Beacon.global.jwt.JwtUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,23 +29,32 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
     private final JwtUtil jwtUtil;
 
     @Override
-    /**
-     * JWT 토큰 검증 필터 수행
-     */
+    /** JWT 토큰 검증 필터 수행 */
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
 
-        Long userId = 0L;
-        //JWT가 헤더에 있는 경우
+        Long userId = null;
+        Long partnerId = null;
+        UserType userType = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);
             //JWT 유효성 검증
             if (jwtUtil.validateToken(token)) {
-                userId = jwtUtil.getUserFromToken(token).getUserId();
+                JwtPayload jwtPayload = jwtUtil.getJwtPayloadFromToken(token);
+                userType = jwtPayload.getUserType();
+                UserDetails userDetails = null;
 
-                // 토큰으로 부터 추출한 userId 를 가지고 디비에서 유저 정보 조회
-                UserDetails userDetails = customUserDetailsService.loadUserById(userId);
+                switch (userType) {
+                    case USER -> {
+                        userId = jwtPayload.getUserId();
+                        userDetails = customUserDetailsService.loadJwtPayloadById(UserType.USER, jwtPayload.getUserId());
+                    }
+                    case PARTNER -> {
+                        partnerId = jwtPayload.getPartnerId();
+                        userDetails = customUserDetailsService.loadJwtPayloadById(UserType.PARTNER, jwtPayload.getPartnerId());
+                    }
+                }
 
                 if (userDetails != null) {
                     //UserDetsils, Password, Role -> 접근권한 인증 Token 생성
@@ -63,10 +68,9 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
         }
 
         request.setAttribute("userId", userId);
+        request.setAttribute("partnerId", partnerId);
         // 여기까지 request filter
         filterChain.doFilter(request, response); // request, response 기준점
         // 여기부터 response filter
-
-
     }
 }

@@ -1,20 +1,18 @@
 package com.bteam.Booking_Beacon.domain.auth.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.bteam.Booking_Beacon.global.annotation.ValidEnum;
+import com.bteam.Booking_Beacon.global.constant.EventType;
+import com.bteam.Booking_Beacon.global.constant.UserType;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
-//@NoArgsConstructor
+@Builder
 public class VerifyEmailReq {
     @NotNull
-    private final String userEmail;
+    private final String email;
 
-    /*
-    생성자
-     */
-    @JsonCreator
-    VerifyEmailReq(String userEmail) {
-        this.userEmail = userEmail;
-    }
+    @NotNull
+    @ValidEnum(enumClass = UserType.class)
+    private final UserType userType;
 }

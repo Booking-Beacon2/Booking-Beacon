@@ -18,6 +18,7 @@ public enum CommonErrorCode implements ErrorCode{
     INVALID_PARAMETER(HttpStatus.BAD_REQUEST, "Invalid parameter included"),
     INVALID_HTTP_METHOD(HttpStatus.METHOD_NOT_ALLOWED, "Invalid HTTP method"),
     BB_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다"),
+    BB_USER_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 존재하는 회원입니다."),
     INVALID_URL(HttpStatus.BAD_REQUEST, "Invalid URL"),
     RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, "Resource not exists"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
@@ -26,13 +27,16 @@ public enum CommonErrorCode implements ErrorCode{
     BB_PASSWORD_INCORRECT(HttpStatus.BAD_REQUEST, "Password incorrect"),
     BB_EMAIL_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다"),
     BB_VERIFY_AUTH_CODE_NOT_FOUND(HttpStatus.BAD_REQUEST, "인증 코드 미발급 또는 인증 시간 초과입니다."),
-    BB_PARTNER_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "동일 사업자번호로 등록된 파트너가 이미 존재합니다."),
+    BB_VERIFY_AUTH_CODE_NOT_EQUAL(HttpStatus.BAD_REQUEST, "인증 코드 불일치"),
+    BB_EIN_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "동일 사업자번호로 등록된 파트너가 이미 존재합니다."),
     BB_PARTNER_NOT_FOUND(HttpStatus.NOT_FOUND, "파트너 정보가 존재하지 않습니다."),
     BB_FILE_NOT_IMAGE(HttpStatus.FORBIDDEN, "파일이 이미지 형태가 아닙니다."),
     BB_FILE_UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "파일 업로드에 실패했습니다."),
     BB_FILE_NOT_FOUND(HttpStatus.BAD_REQUEST, "파일이 존재하지 않습니다."),
     BB_FILE_DOWNLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "파일 다운에 실패했습니다."),
-    BB_EVENT_FILE_ALREADY_UPLOADED(HttpStatus.BAD_REQUEST, "이미 등록된 파일입니다.")
+    BB_EVENT_FILE_ALREADY_UPLOADED(HttpStatus.BAD_REQUEST, "이미 등록된 파일입니다."),
+    BB_HAS_NONE_USER_ID(HttpStatus.BAD_REQUEST, "userId 가 존재하지 않습니다."),
+    BB_HAS_NONE_PARTNER_ID(HttpStatus.BAD_REQUEST, "partnerId 가 존재하지 않습니다.")
     ;
 
     // 여기서 상속 받은 getName 이 enum 의 name 즉 USER_NOT_FOUND 를 가져온다.

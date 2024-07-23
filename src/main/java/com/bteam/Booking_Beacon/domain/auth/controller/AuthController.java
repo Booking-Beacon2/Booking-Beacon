@@ -4,16 +4,15 @@ import com.bteam.Booking_Beacon.domain.auth.dto.request.*;
 import com.bteam.Booking_Beacon.domain.auth.dto.response.CreatePartnerRes;
 import com.bteam.Booking_Beacon.domain.auth.dto.response.CreateUserRes;
 import com.bteam.Booking_Beacon.domain.auth.dto.response.TokenRes;
-import com.bteam.Booking_Beacon.domain.auth.dto.response.VerifyEmailRes;
+import com.bteam.Booking_Beacon.domain.auth.entity.PartnerEntity;
 import com.bteam.Booking_Beacon.domain.auth.entity.UserEntity;
 import com.bteam.Booking_Beacon.domain.auth.service.AuthService;
-import com.bteam.Booking_Beacon.global.format.CommonApiResponse;
+import com.bteam.Booking_Beacon.global.constant.UserType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.models.media.MediaType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,32 +37,27 @@ public class AuthController {
     @GetMapping("info")
     @Operation(summary = "info")
     public void info() {
-        log.info("auth-service has initialized! 222222");
+        log.info("auth-service has initialized!");
     }
 
-    /***** USER *****/
-    @GetMapping("users")
-    @Operation(summary = "유저 리스트 조회")
-    public ResponseEntity<List<UserEntity>> getUsers(@RequestAttribute("userId") Long userId) {
-        return authService.getUsers();
-    }
-
-    @GetMapping("user")
-    @Operation(summary = "본인 정보 조회")
-    public ResponseEntity<Optional<UserEntity>> getUser(@RequestAttribute("userId") Long userId) {
-        return authService.getUser(userId);
-    }
-
+    /***** COMMON *****/
     @Operation(summary = "이메일 인증 코드 메일 발송")
     @PostMapping("verify/email")
-    public ResponseEntity<VerifyEmailRes> sendVerifyEmail(@Valid @RequestBody VerifyEmailReq verifyEmailReq) {
-        return this.authService.sendVerifyEmail(verifyEmailReq.getUserEmail());
+    public void sendVerifyEmail(@Valid @RequestBody VerifyEmailReq verifyEmailReq) {
+        this.authService.sendVerifyEmail(verifyEmailReq);
     }
 
     @Operation(summary = "이메일 인증 코드 검증")
     @GetMapping("verify/email")
-    public ResponseEntity<VerifyEmailRes> verifyEmailAuthCode(@Validated @RequestParam String email) {
-        return this.authService.verifyEmailAuthCode(email);
+    public ResponseEntity<Boolean> verifyEmailAuthCode(@Validated @RequestParam String authCode, @RequestParam String email, @RequestParam UserType userType) {
+        return this.authService.verifyEmailAuthCode(VerifyEmailAuthCodeReq.builder().authCode(authCode).email(email).userType(userType).build());
+    }
+
+    /***** USER *****/
+    @PostMapping("join")
+    @Operation(summary = "개인 회원가입")
+    public ResponseEntity<CreateUserRes> createUser(@RequestBody CreateUserReq createUserReq) {
+        return this.authService.createUser(createUserReq);
     }
 
     @PostMapping("login")
@@ -70,7 +66,7 @@ public class AuthController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = TokenRes.class))
             })
     })
-    public ResponseEntity<TokenRes> login(@Validated @RequestBody LoginReq loginReq, TokenRes tokenRes) {
+    public ResponseEntity<TokenRes> login(@Validated @RequestBody LoginReq loginReq) {
         return this.authService.login(loginReq);
     }
 
@@ -83,27 +79,29 @@ public class AuthController {
         return this.authService.refreshAccessToken(refreshAccessTokenReq.getRefreshToken());
     }
 
-    @GetMapping("user-error")
-    public Object error() {
-        return this.authService.userError();
-    }
-
-    @GetMapping("unhandled-error")
-    public Object unhandledError() {
-        return this.authService.unhandledError();
-    }
-
-    @PostMapping("join")
-    @Operation(summary = "개인 회원가입")
-    public ResponseEntity<CreateUserRes> createUser(@RequestBody CreateUserReq createUserReq) {
-        return this.authService.createUser(createUserReq);
-    }
-
     @PutMapping("user")
     @Operation(summary = "본인 정보 수정")
-    public void updateUser(@RequestBody UpdateUserReq updateUserReq) {
-        this.authService.updateUser(updateUserReq);
+    public void updateUser(@RequestAttribute("userId") Optional<Long> userId, @RequestBody UpdateUserReq updateUserReq) {
+        this.authService.updateUser(userId, UpdateUserReq.builder().userName(updateUserReq.getUserName()).password(updateUserReq.getPassword()).build());
     }
+
+    @GetMapping("user")
+    @Operation(summary = "본인 정보 조회")
+    public ResponseEntity<Optional<UserEntity>> getUser(@RequestAttribute("userId") Optional<Long> userId) {
+        return authService.getUser(userId);
+    }
+
+    @GetMapping("users")
+    @Operation(summary = "유저 리스트 조회")
+    public ResponseEntity<List<UserEntity>> getUsers() {
+        return authService.getUsers();
+    }
+
+//    @DeleteMapping("user")
+//    @Operation(summary = "개인 회원 탈퇴")
+//    public void withdrawUser(@RequestAttribute("userId") Long userId) {
+//        this.authService.withdrawUser(userId);
+//    }
 
     /***** PARTNER *****/
     @PostMapping("join-partner")
@@ -114,12 +112,25 @@ public class AuthController {
 
     @PutMapping("partner")
     @Operation(summary = "파트너 정보 수정")
-    public void updatePartner(@RequestAttribute("userId") Long userId, @RequestBody UpdatePartnerReq updatePartnerReq) {
-        this.authService.updatePartner(userId, updatePartnerReq);
+    public void updatePartner(@RequestAttribute("partnerId") Optional<Long> partnerId, @RequestBody UpdatePartnerReq updatePartnerReq) {
+        this.authService.updatePartner(partnerId, updatePartnerReq);
     }
 
-    @DeleteMapping("partner")
-    public void deletePartner(@RequestAttribute("userId") Long userId) {
-        this.authService.deletePartner(userId);
+//    @Operation(summary = "파트너 탈퇴")
+//    @DeleteMapping("partner")
+//    public void withdrawPartner(@RequestAttribute("partnerId") Long partnerId) {
+//        this.authService.withdrawPartner(partnerId);
+//    }
+
+    @GetMapping("partner")
+    @Operation(summary = "파트너 정보 조회")
+    public ResponseEntity<Optional<PartnerEntity>> getPartner(@RequestAttribute("partnerId") Optional<Long> partnerId) {
+        return authService.getPartner(partnerId);
+    }
+
+    @GetMapping("partners")
+    @Operation(summary = "파트너 리스트 조회")
+    public ResponseEntity<List<PartnerEntity>> getPartners() {
+        return authService.getPartners();
     }
 }

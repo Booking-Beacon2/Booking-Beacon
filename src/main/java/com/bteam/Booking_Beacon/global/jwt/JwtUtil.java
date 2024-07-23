@@ -1,5 +1,6 @@
 package com.bteam.Booking_Beacon.global.jwt;
 
+import com.bteam.Booking_Beacon.global.constant.UserType;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -25,13 +27,13 @@ public class JwtUtil {
         this.refreshTokenValidityInSeconds = refreshTokenValidityInSeconds;
     }
 
-    /**
-     * 토큰 생성
-     */
-    public String createToken(JwtUserInfo jwtUserInfo, String tokenType) {
+    /** 토큰 생성 */
+    public String createToken(JwtPayload jwtPayload, String tokenType) {
         Claims claims = Jwts.claims();
-        claims.put("userId", jwtUserInfo.getUserId());
-        claims.put("username", jwtUserInfo.getUsername());
+        claims.put("userType", jwtPayload.getUserType());
+        claims.put("userId", jwtPayload.getUserId());
+        claims.put("partnerId", jwtPayload.getPartnerId());
+        claims.put("email", jwtPayload.getEmail());
 
         long now = (new Date()).getTime();
         long validityInSeconds = Objects.equals(tokenType, "access") ? accessTokenValidityInSeconds : Objects.equals(tokenType, "refresh") ? refreshTokenValidityInSeconds : 0;
@@ -40,9 +42,7 @@ public class JwtUtil {
         return Jwts.builder().setClaims(claims).setExpiration(expiration).signWith(SignatureAlgorithm.HS256, key).compact();
     }
 
-    /**
-     * 토큰에서 claims 추출
-     */
+    /** 토큰에서 claims 추출 */
     public Claims parseToken(String token) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
@@ -52,20 +52,29 @@ public class JwtUtil {
     }
 
 
-    /**
-     * 토큰에서 유저 정보 추출
-     */
-    public JwtUserInfo getUserFromToken(String token) {
+    /** 토큰에서 유저 정보 추출 */
+    public JwtPayload getJwtPayloadFromToken(String token) {
         Claims claims = parseToken(token);
-        long userId = claims.get("userId", Long.class);
-        String username = claims.get("username", String.class);
+        UserType userType = UserType.valueOf(claims.get("userType", String.class));
+        String email = claims.get("email", String.class);
         long exp = claims.get("exp", Long.class);
-        return JwtUserInfo.builder().userId(userId).username(username).exp(exp).build();
+
+        JwtPayload jwtPayload = null;
+        switch (userType) {
+            case USER -> {
+                long userId = claims.get("userId", Long.class);
+                jwtPayload = JwtPayload.builder().userType(userType).userId(userId).email(email).exp(exp).build();
+            }
+            case PARTNER -> {
+                long partnerId = claims.get("partnerId", Long.class);
+                jwtPayload = JwtPayload.builder().userType(userType).partnerId(partnerId).email(email).exp(exp).build();
+            }
+        }
+
+        return jwtPayload;
     }
 
-    /**
-     * @description 토큰이 정상적인 형태인지 여부
-     */
+    /** 토큰이 정상적인 형태인지 여부 */
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
