@@ -1,11 +1,10 @@
 package com.bteam.Booking_Beacon.global.jwt;
 
+import com.bteam.Booking_Beacon.global.auth.Role;
 import com.bteam.Booking_Beacon.global.constant.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.Optional;
 
 /**
  * @description 토큰에 담을 정보
@@ -21,4 +20,5 @@ public class JwtPayload {
     private String email;
     private Long exp;
     private Long iat;
+    private Role role;
 }

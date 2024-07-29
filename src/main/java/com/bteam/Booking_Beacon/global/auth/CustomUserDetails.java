@@ -1,20 +1,24 @@
-package com.bteam.Booking_Beacon.global.jwt;
+package com.bteam.Booking_Beacon.global.auth;
 
+import com.bteam.Booking_Beacon.global.jwt.JwtPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    private final JwtPayload JwtPayload;
+    private final JwtPayload jwtPayload;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        Collection<GrantedAuthority> collectors = new ArrayList<>();
+        collectors.add(()->{ return "ROLE_" + jwtPayload.getRole(); });
+        return collectors;
     }
 
     @Override

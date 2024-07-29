@@ -8,11 +8,11 @@ import com.bteam.Booking_Beacon.domain.auth.entity.PartnerEntity;
 import com.bteam.Booking_Beacon.domain.auth.entity.UserEntity;
 import com.bteam.Booking_Beacon.domain.auth.repository.PartnerRepository;
 import com.bteam.Booking_Beacon.domain.auth.repository.UserRepository;
-import com.bteam.Booking_Beacon.global.config.AuthConfig;
+import com.bteam.Booking_Beacon.global.config.BCryptConfig;
 import com.bteam.Booking_Beacon.global.constant.UserType;
 import com.bteam.Booking_Beacon.global.exception.CommonErrorCode;
 import com.bteam.Booking_Beacon.global.exception.RestApiException;
-import com.bteam.Booking_Beacon.global.jwt.JwtUtil;
+import com.bteam.Booking_Beacon.global.jwt.JwtService;
 import com.bteam.Booking_Beacon.global.jwt.JwtPayload;
 import com.bteam.Booking_Beacon.global.util.EmailService;
 import com.bteam.Booking_Beacon.global.util.RedisService;
@@ -22,11 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -38,8 +34,8 @@ import java.util.concurrent.TimeUnit;
 public class AuthService {
     private final UserRepository userRepository;
     private final PartnerRepository partnerRepository;
-    private final JwtUtil jwtTokenUtil;
-    private final AuthConfig authConfig;
+    private final JwtService jwtService;
+    private final BCryptConfig bcryptConfig;
     private final RedisService redisService;
     private final EmailService emailService;
 
@@ -121,12 +117,12 @@ public class AuthService {
             }
         }
 
-        if (!authConfig.passwordEncoder().matches(loginReq.getPassword(), password)) {
+        if (!bcryptConfig.passwordEncoder().matches(loginReq.getPassword(), password)) {
             throw new RestApiException(CommonErrorCode.BB_PASSWORD_INCORRECT);
         }
 
-        String accessToken = this.jwtTokenUtil.createToken(jwtPayload, "access");
-        String refreshToken = this.jwtTokenUtil.createToken(jwtPayload, "refresh");
+        String accessToken = this.jwtService.createToken(jwtPayload, "access");
+        String refreshToken = this.jwtService.createToken(jwtPayload, "refresh");
         TokenRes tokenRes = TokenRes
                 .builder()
                 .accessToken(accessToken)
@@ -138,7 +134,7 @@ public class AuthService {
 
     /** refresh access token */
     public ResponseEntity<TokenRes> refreshAccessToken(String refreshToken) {
-        JwtPayload userInfo = this.jwtTokenUtil.getJwtPayloadFromToken(refreshToken);
+        JwtPayload userInfo = this.jwtService.getJwtPayloadFromToken(refreshToken);
 
         long now = System.currentTimeMillis();
         long exp = userInfo.getExp();
@@ -150,8 +146,8 @@ public class AuthService {
         }
 
         JwtPayload jwtPayload = JwtPayload.builder().userType(userInfo.getUserType()).userId(userInfo.getUserId()).partnerId(userInfo.getPartnerId()).email(userInfo.getEmail()).build();
-        String access = this.jwtTokenUtil.createToken(jwtPayload, "access");
-        String refresh = this.jwtTokenUtil.createToken(jwtPayload, "refresh");
+        String access = this.jwtService.createToken(jwtPayload, "access");
+        String refresh = this.jwtService.createToken(jwtPayload, "refresh");
 
         TokenRes tokenRes = TokenRes.builder().accessToken(access).refreshToken(refresh).build();
         return ResponseEntity.ok(tokenRes);
@@ -166,7 +162,7 @@ public class AuthService {
             throw new RestApiException(CommonErrorCode.BB_EMAIL_ALREADY_EXIST);
         }
 
-        String encryptedPassword = authConfig.passwordEncoder().encode(createUserReq.getPassword());
+        String encryptedPassword = bcryptConfig.passwordEncoder().encode(createUserReq.getPassword());
         createUserReq.setPassword(encryptedPassword);
         Long userId = this.userRepository.save(createUserReq.toEntity()).getUserId();
         CreateUserRes createUserRes = CreateUserRes.builder().userId(userId).build();
@@ -191,7 +187,7 @@ public class AuthService {
         }
 
         if (updateUserReq.getPassword() != null) {
-            String encryptedPassword = authConfig.passwordEncoder().encode(updateUserReq.getPassword());
+            String encryptedPassword = bcryptConfig.passwordEncoder().encode(updateUserReq.getPassword());
             updateUserReq.setPassword(encryptedPassword);
         }
     }
@@ -230,7 +226,7 @@ public class AuthService {
             throw new RestApiException(CommonErrorCode.BB_EIN_ALREADY_EXIST);
         }
 
-        String encryptedPassword = authConfig.passwordEncoder().encode(createPartnerReq.getPassword());
+        String encryptedPassword = bcryptConfig.passwordEncoder().encode(createPartnerReq.getPassword());
         createPartnerReq.setPassword(encryptedPassword);
 
         PartnerEntity partnerEntity = PartnerEntity.builder()

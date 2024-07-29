@@ -1,5 +1,6 @@
 package com.bteam.Booking_Beacon.domain.auth.entity;
 
+import com.bteam.Booking_Beacon.global.auth.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
@@ -7,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -21,7 +23,7 @@ import java.sql.Timestamp;
 public class PartnerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, name = "partner_id")
+    @Column(nullable = false, name = "id")
     private Long partnerId;
 
     @Column(nullable = false, length = 100, name = "partner_name")
@@ -50,6 +52,10 @@ public class PartnerEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp createdDate;
 
+    @Column(nullable = false, name = "role")
+    @ColumnDefault("PARTNER")
+    private String role;
+
     @Builder
     public PartnerEntity(String partnerName, String userName, String email, String password, String ein, String phoneNumber) {
         this.email = email;
@@ -58,5 +64,6 @@ public class PartnerEntity {
         this.userName = userName;
         this.ein = ein;
         this.phoneNumber = phoneNumber;
+        this.role = Role.PARTNER.toString();
     }
 }

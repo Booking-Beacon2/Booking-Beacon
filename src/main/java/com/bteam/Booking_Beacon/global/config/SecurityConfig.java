@@ -1,8 +1,9 @@
 package com.bteam.Booking_Beacon.global.config;
 
+import com.bteam.Booking_Beacon.global.auth.Role;
 import com.bteam.Booking_Beacon.global.filter.JwtAuthFilter;
-import com.bteam.Booking_Beacon.global.jwt.CustomUserDetailsService;
-import com.bteam.Booking_Beacon.global.jwt.JwtUtil;
+import com.bteam.Booking_Beacon.global.auth.CustomUserDetailsService;
+import com.bteam.Booking_Beacon.global.jwt.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,43 +13,41 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Repository;
 
 import java.io.PrintWriter;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @AllArgsConstructor
 public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf((csrfConfig) -> csrfConfig.disable())
             .headers((headerConfig) -> headerConfig.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()));
 
-        http.addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtService), UsernamePasswordAuthenticationFilter.class);
 
+        // http 요청에 대한 인가 설정
         http.authorizeHttpRequests(
                 authorize -> authorize
                         .requestMatchers("/health").permitAll()
-                        .requestMatchers("/auth/verify/email").permitAll()
-                        .requestMatchers("/auth/refresh-token").permitAll()
-                        .requestMatchers("/auth/join").permitAll()
-                        .requestMatchers("/auth/join-partner").permitAll()
-                        .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/auth/info").permitAll()
                         .requestMatchers("/api-docs/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/swagger/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/auth/info", "/auth/login", "/auth/join", "/auth/join-partner", "/auth/verify/email", "/auth/refresh-token").permitAll()
+                        .requestMatchers("/auth/user", "/auth/users").hasAnyRole(Role.USER.toString(), Role.TEST_USER.toString(), Role.ADMIN.toString())
+                        .requestMatchers("/auth/partner", "/auth/partners").hasRole(Role.PARTNER.toString())
                         .anyRequest().authenticated()
         );
 

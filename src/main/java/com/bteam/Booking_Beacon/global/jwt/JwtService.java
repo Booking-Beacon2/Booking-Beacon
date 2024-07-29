@@ -11,16 +11,15 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Optional;
 
 @Slf4j
 @Component
-public class JwtUtil {
+public class JwtService {
     private final Key key;
     private final long accessTokenValidityInSeconds;
     private final long refreshTokenValidityInSeconds;
 
-    public JwtUtil(@Value("${jwt.secret}")String secretKey, @Value("${jwt.access-token-validity-in-seconds}") long accessTokenValidityInSeconds, @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInSeconds) {
+    public JwtService(@Value("${jwt.secret}")String secretKey, @Value("${jwt.access-token-validity-in-seconds}") long accessTokenValidityInSeconds, @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInSeconds) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenValidityInSeconds = accessTokenValidityInSeconds;
@@ -39,7 +38,11 @@ public class JwtUtil {
         long validityInSeconds = Objects.equals(tokenType, "access") ? accessTokenValidityInSeconds : Objects.equals(tokenType, "refresh") ? refreshTokenValidityInSeconds : 0;
         Date expiration = new Date(now + validityInSeconds * 1000);
 
-        return Jwts.builder().setClaims(claims).setExpiration(expiration).signWith(SignatureAlgorithm.HS256, key).compact();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(expiration)
+                .signWith(SignatureAlgorithm.HS256, key)
+                .compact();
     }
 
     /** 토큰에서 claims 추출 */
