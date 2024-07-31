@@ -1,4 +1,4 @@
-package com.bteam.Booking_Beacon.domain.beacon.stream.sse;
+package com.bteam.Booking_Beacon.global.sse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -63,6 +64,17 @@ public class SseService {
 
     public void notify(Long userId, String message) {
         this.publishEmitter(userId, message);
+    }
+
+    // 전체 emitter 리스트
+    public Map<Long, SseEmitter> getEmitters() {
+        return this.emitterRepository.getEmitters();
+    }
+
+
+    // 전체 emitter 개수
+    public Integer getEmitterCount() {
+        return this.emitterRepository.getEmitterCount();
     }
 
 }
