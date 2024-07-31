@@ -19,7 +19,8 @@ spring:
       host: ENC(S9GOFqVPSNMM9bQKwGKrmb5l3be/4inRe6ppgMr5mIETVGnn5ydVfKdGZqSnIKlXkyaNXkEwuESWFy/v+WJygn+pwzv4d+I5qaW8mtX5Va4=)
       port: 6379
   jpa:
-    show-sql: true
+    show-sql: false
+    open-in-view: false
     hibernate:
       ddl-auto: update
     properties:

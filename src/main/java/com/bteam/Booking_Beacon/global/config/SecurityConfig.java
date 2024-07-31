@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/api-docs/**").permitAll()
                         .requestMatchers("/swagger/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/beacon/sse-subscribe").permitAll()
                         .requestMatchers("/auth/info", "/auth/login", "/auth/join", "/auth/join-partner", "/auth/verify/email", "/auth/refresh-token").permitAll()
                         .requestMatchers("/auth/user", "/auth/users").hasAnyRole(Role.USER.toString(), Role.TEST_USER.toString(), Role.ADMIN.toString())
                         .requestMatchers("/auth/partner", "/auth/partners").hasRole(Role.PARTNER.toString())
