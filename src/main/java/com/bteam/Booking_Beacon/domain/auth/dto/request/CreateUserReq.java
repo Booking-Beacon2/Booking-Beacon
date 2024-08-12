@@ -25,7 +25,7 @@ public class CreateUserReq {
     private String email;
 
     @NotNull
-    @Length(max = 11)
+    @Length(max = 11, message = "전화번호는 최대 11자리까지 입력 가능합니다.")
     private String phoneNumber;
 
     public UserEntity toEntity() {
