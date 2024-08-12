@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 public class VerifyEmailAuthCodeReq {
     @NotNull
-    @Length(min = 6, max = 6)
+    @Length(min = 6, max = 6, message = "인증코드는 숫자로만 구성된 6자리 문자열입니다.")
     private String authCode;
 
     @NotNull

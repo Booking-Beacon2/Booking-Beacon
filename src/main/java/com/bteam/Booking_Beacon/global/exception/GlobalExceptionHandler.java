@@ -102,7 +102,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.info("handleMethodArgumentNotValid");
         ErrorCode errorCode = CommonErrorCode.METHOD_ARG_NOT_VALID;
         String stackTrace = String.valueOf(Arrays.stream(ex.getStackTrace()).findFirst());
-        return handleExceptionInternal(errorCode, ex.getMessage(), stackTrace);
+        return handleExceptionInternal(errorCode, ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage(), stackTrace);
     }
 
 
