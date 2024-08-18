@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -48,7 +49,9 @@ public class SecurityConfig {
                         .requestMatchers("/beacon/sse-subscribe").permitAll()
                         .requestMatchers("/auth/info", "/auth/login", "/auth/join", "/auth/join-partner", "/auth/verify/email", "/auth/refresh-token").permitAll()
                         .requestMatchers("/auth/user", "/auth/users").hasAnyRole(Role.USER.toString(), Role.TEST_USER.toString(), Role.ADMIN.toString())
-                        .requestMatchers("/auth/partner", "/auth/partners").hasRole(Role.PARTNER.toString())
+                        .requestMatchers("/auth/partner", "/auth/partners").hasAnyRole(Role.PARTNER.toString(), Role.ADMIN.toString())
+                        .requestMatchers(HttpMethod.POST, "/event").hasAnyRole(Role.PARTNER.toString(), Role.ADMIN.toString())
+                        .requestMatchers(HttpMethod.GET, "/event").hasAnyRole(Role.USER.toString(),Role.PARTNER.toString(), Role.ADMIN.toString())
                         .anyRequest().authenticated()
         );
 
