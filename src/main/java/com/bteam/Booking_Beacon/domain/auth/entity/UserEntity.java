@@ -1,5 +1,6 @@
 package com.bteam.Booking_Beacon.domain.auth.entity;
 
+import com.bteam.Booking_Beacon.domain.booking.entity.BookingEntity;
 import com.bteam.Booking_Beacon.global.auth.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -13,6 +14,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 //@ToString
 @Getter
@@ -30,7 +32,7 @@ public class UserEntity {
     @Column(nullable = false, length = 50, name = "user_name")
     private  String userName;
 
-    @Column(nullable = false, length = 50, name = "email")
+    @Column(nullable = false, length = 50, name = "email", unique = true)
     private String email;
 
     @Column(nullable = false, length = 100, name = "password")
@@ -49,6 +51,9 @@ public class UserEntity {
     @Column(nullable = false, name = "role")
     @ColumnDefault("USER")
     private String role;
+
+    @Version
+    private Integer version;
 
     @Builder
     public UserEntity(String email, String password, String userName, String phoneNumber) {
