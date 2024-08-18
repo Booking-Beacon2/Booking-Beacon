@@ -32,14 +32,14 @@ public class PartnerEntity {
     @Column(nullable = false, length = 50, name = "user_name")
     private  String userName;
 
-    @Column(nullable = false, length = 50, name = "email")
+    @Column(nullable = false, length = 50, name = "email", unique = true)
     private String email;
 
     @Column(nullable = false, length = 100, name = "password")
     @JsonIgnore
     private String password;
 
-    @Column(nullable = false, length = 10, name = "ein")
+    @Column(nullable = false, length = 10, name = "ein", unique = true)
     @Pattern(regexp = "\\d+", message = "Must contain only numeric characters")
     private String ein;
 
@@ -55,6 +55,9 @@ public class PartnerEntity {
     @Column(nullable = false, name = "role")
     @ColumnDefault("PARTNER")
     private String role;
+
+    @Version
+    private Integer version;
 
     @Builder
     public PartnerEntity(String partnerName, String userName, String email, String password, String ein, String phoneNumber) {
